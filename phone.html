@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navigation</title>
+    <!-- Add Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Add Material Symbols Outlined -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- Add Material Symbols Outlined with sort icon -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=sort" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            padding-top: 60px; /* Added to account for fixed top bar */
+        }
+        
+        /* Top bar styles */
+        .topbar {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: none; /* Removed shadow */
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            height: 40px;
+        }
+        
+        .logo {
+            height: 100%;
+        }
+        
+        .settings-button {
+            color: black;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .settings-button:hover {
+            background-color: transparent;
+            border: 1px solid black;
+        }
+        
+        /* Bottom navbar styles */
+        .navbar {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: none; /* Removed shadow */
+            z-index: 900;
+        }
+        
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .nav-button {
+            color: black;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Style for both icon types */
+        .nav-button .material-icons,
+        .nav-button .material-symbols-outlined {
+            font-size: 24px;
+        }
+        
+        /* Additional styles to ensure Material Symbols appear properly */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            line-height: 1;
+            display: inline-block;
+        }
+        
+        .content {
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 70px; /* Added to account for bottom navbar */
+        }
+        
+        /* Media Query for phones and small devices */
+        @media screen and (max-width: 768px) {
+            /* Existing responsive styles adjusted */
+            .nav-button .material-icons,
+            .nav-button .material-symbols-outlined {
+                font-size: 24px;
+            }
+            
+            /* Remove text under icons */
+            .nav-button span:not(.material-icons):not(.material-symbols-outlined) {
+                display: none;
+            }
+        }
+
+        /* Additional styles for market cards - only visible on mobile */
+        .market-section-mobile {
+            display: none;
+            width: 100%;
+            padding: 20px 15px;
+            box-sizing: border-box;
+        }
+        
+        /* Crypto cards styling */
+        .crypto-cards-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Crypto cards styling */
+        .crypto-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .crypto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .crypto-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .crypto-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .crypto-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        
+        .crypto-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .crypto-symbol {
+            font-size: 12px;
+            color: #888;
+            margin-left: 4px;
+        }
+        
+        .crypto-rank {
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .crypto-price {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 4px 0;
+            color: #333;
+        }
+        
+        .crypto-change {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .crypto-change.positive {
+            background-color: rgba(77, 175, 124, 0.15);
+            color: #4daf7c;
+        }
+        
+        .crypto-change.negative {
+            background-color: rgba(230, 57, 70, 0.15);
+            color: #e63946;
+        }
+        
+        /* Chart container styling improvement */
+        .crypto-chart-container {
+            width: 100%;
+            height: 40px;
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden; /* Prevent chart from overflowing */
+            background-color: rgba(255, 255, 255, 0.05); /* Slightly visible container */
+            border-radius: 6px; /* Rounded corners for container */
+        }
+        
+        .crypto-chart {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Media query for mobile view */
+        @media screen and (max-width: 768px) {
+            .market-section-mobile {
+                display: block; /* Show only on mobile */
+            }
+            
+            /* Single column for very small devices */
+            @media screen and (max-width: 400px) {
+                .crypto-cards-container {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+
+        /* Market data overview styles */
+        .market-data-overview {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+        }
+        
+        .market-data-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .market-data-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        .card-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Fear & Greed Index styling */
+        .gauge-container {
+            width: 100%;
+            margin-top: 4px;
+        }
+        
+        .gauge {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        
+        .gauge-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(
+                to right,
+                #e63946 0%,
+                #e66c39 25%,
+                #e6b139 50%,
+                #71e639 75%,
+                #39e655 100%
+            );
+        }
+        
+        .gauge-marker {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 2px solid #333;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            left: 50%; /* Default position */
+        }
+        
+        .gauge-label {
+            font-size: 13px;
+            text-align: center;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* Sentiment colors */
+        .market-data-card.fear-greed.extreme-fear .gauge-label {
+            color: #e63946;
+        }
+        
+        .market-data-card.fear-greed.fear .gauge-label {
+            color: #e66c39;
+        }
+        
+        .market-data-card.fear-greed.neutral .gauge-label {
+            color: #e6b139;
+        }
+        
+        .market-data-card.fear-greed.greed .gauge-label {
+            color: #71e639;
+        }
+        
+        .market-data-card.fear-greed.extreme-greed .gauge-label {
+            color: #39e655;
+        }
+        
+        /* Responsive adjustments */
+        @media screen and (max-width: 400px) {
+            .market-data-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Controls row between market data and crypto cards */
+        .market-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        /* Sort button styling */
+        .sort-button {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border: 1px solid #eee;
+            border-radius: 20px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .sort-button .material-symbols-outlined {
+            margin-right: 5px;
+            font-size: 18px;
+        }
+        
+        .sort-button:hover {
+            background-color: #f9f9f9;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        
+        /* Sort dropdown styling */
+        .sort-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 150px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            margin-top: 5px;
+        }
+        
+        .sort-dropdown.expanded {
+            max-height: 220px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .sort-option {
+            padding: 10px 15px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .sort-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .sort-option.active {
+            background-color: rgba(246, 203, 142, 0.2);
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* Right-aligned search box styling */
+        .search-box {
+            width: 30%;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 8px 10px 8px 30px;
+            border-radius: 20px;
+            border: 1px solid #eee;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #ddd;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 15px;
+        }
+        
+        /* Responsive adjustments */
+        @media screen and (max-width: 500px) {
+            .sort-button span.label {
+                display: none;
+            }
+            
+            .sort-button .material-symbols-outlined {
+                margin-right: 0;
+            }
+            
+            .search-box {
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top bar with logo and settings -->
+    <div class="topbar">
+        <div class="logo-container">
+            <img src="venuth.png" alt="Logo" class="logo">
+        </div>
+        <button class="settings-button" aria-label="Settings">
+            <span class="material-symbols-outlined">settings</span>
+        </button>
+    </div>
+    
+    <!-- Bottom navigation bar -->
+    <nav class="navbar">
+        <div class="nav-items">
+            <button class="nav-button" aria-label="Home">
+                <span class="material-symbols-outlined">home</span>
+            </button>
+            <button class="nav-button" aria-label="Widgets">
+                <span class="material-symbols-outlined">widgets</span>
+            </button>
+            <button class="nav-button" aria-label="AI">
+                <img src="zenus.png" alt="Zenus" height="24">
+            </button>
+            <button class="nav-button" aria-label="Profile">
+                <span class="material-symbols-outlined">person</span>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <!-- Market data panels (visible on all screen sizes) -->
+        <div class="market-data-overview">
+            <div class="market-data-row">
+                <div class="market-data-card mcap">
+                    <div class="card-label">Market Cap</div>
+                    <div class="card-value" id="total-market-cap">...</div>
+                </div>
+                <div class="market-data-card volume">
+                    <div class="card-label">24h Volume</div>
+                    <div class="card-value" id="total-volume">...</div>
+                </div>
+            </div>
+            <div class="market-data-row">
+                <div class="market-data-card btc-dom">
+                    <div class="card-label">BTC Dominance</div>
+                    <div class="card-value" id="btc-dominance">...</div>
+                </div>
+                <div class="market-data-card fear-greed">
+                    <div class="card-label">Fear Index</div>
+                    <div class="gauge-container">
+                        <div class="gauge">
+                            <div class="gauge-fill"></div>
+                            <div class="gauge-marker"></div>
+                        </div>
+                        <div class="gauge-label" id="fear-greed-value">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls row with sort and search -->
+        <div class="market-controls-row">
+            <!-- Sort button and dropdown -->
+            <div class="sort-container">
+                <button class="sort-button" id="sortButton">
+                    <span class="material-symbols-outlined">sort</span>
+                    <span class="label">Trending</span>
+                </button>
+                <div class="sort-dropdown" id="sortDropdown">
+                    <div class="sort-option active" data-period="trending">Trending</div>
+                    <div class="sort-option" data-period="1h">1 Hour</div>
+                    <div class="sort-option" data-period="4h">4 Hours</div>
+                    <div class="sort-option" data-period="1d">1 Day</div>
+                    <div class="sort-option" data-period="7d">7 Days</div>
+                </div>
+            </div>
+            
+            <!-- Search box -->
+            <div class="search-box">
+                <span class="material-symbols-outlined search-icon">search</span>
+                <input type="text" class="search-input" placeholder="Search...">
+            </div>
+        </div>
+        
+        <!-- Crypto cards container -->
+        <div class="market-section-mobile">
+            <div id="crypto-cards-container" class="crypto-cards-container">
+                <!-- Cards will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Chart.js for crypto charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Function to fetch crypto data and create cards
+        async function fetchCryptoData() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=true');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const data = await response.json();
+                createCryptoCards(data);
+            } catch (error) {
+                console.error('Error fetching crypto data:', error);
+                // Use sample data as fallback
+                createCryptoCardsWithSampleData();
+            }
+        }
+        
+        // Function to create crypto cards with sample data (fallback)
+        function createCryptoCardsWithSampleData() {
+            const sampleData = [
+                { id: 'bitcoin', symbol: 'btc', name: 'Bitcoin', image: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', current_price: 68423, market_cap_rank: 1, price_change_percentage_24h: 2.5, sparkline_in_7d: { price: generateFakeSparkline(true) } },
+                { id: 'ethereum', symbol: 'eth', name: 'Ethereum', image: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', current_price: 3498, market_cap_rank: 2, price_change_percentage_24h: 1.8, sparkline_in_7d: { price: generateFakeSparkline(true) } },
+                { id: 'tether', symbol: 'usdt', name: 'Tether', image: 'https://assets.coingecko.com/coins/images/325/small/Tether.png', current_price: 1.00, market_cap_rank: 3, price_change_percentage_24h: 0.05, sparkline_in_7d: { price: generateFakeSparkline(true) } },
+                { id: 'binancecoin', symbol: 'bnb', name: 'Binance Coin', image: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png', current_price: 575, market_cap_rank: 4, price_change_percentage_24h: -1.2, sparkline_in_7d: { price: generateFakeSparkline(false) } }
+            ];
+            
+            createCryptoCards(sampleData);
+        }
+        
+        // Helper function to generate fake sparkline data - fixed to prevent falling glitch
+        function generateFakeSparkline(uptrend) {
+            const prices = [];
+            let baseValue = 100;
+            const volatility = uptrend ? 2 : 2.5; // Control volatility
+            const trend = uptrend ? 0.8 : -0.8;   // Control trend direction
+            
+            for (let i = 0; i < 24; i++) {
+                // Add small random movement + slight trend bias
+                baseValue += (Math.random() * volatility - (volatility / 2)) + trend;
+                // Ensure value doesn't go below a reasonable minimum
+                baseValue = Math.max(baseValue, 70);
+                prices.push(baseValue);
+            }
+            
+            return prices;
+        }
+        
+        // Function to create crypto cards
+        function createCryptoCards(data) {
+            const container = document.getElementById('crypto-cards-container');
+            container.innerHTML = ''; // Clear any existing cards
+            
+            data.forEach(coin => {
+                // Create card element
+                const card = document.createElement('div');
+                card.className = 'crypto-card';
+                card.dataset.id = coin.id;
+                card.dataset.symbol = coin.symbol;
+                
+                // Format price with appropriate decimal places
+                let formattedPrice;
+                if (coin.current_price >= 1000) {
+                    formattedPrice = '$' + coin.current_price.toLocaleString();
+                } else if (coin.current_price >= 1) {
+                    formattedPrice = '$' + coin.current_price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                } else {
+                    formattedPrice = '$' + coin.current_price.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 6});
+                }
+                
+                // Determine if price change is positive or negative
+                const priceChange = coin.price_change_percentage_24h || 0;
+                const changeClass = priceChange >= 0 ? 'positive' : 'negative';
+                const priceChangeFormatted = (priceChange >= 0 ? '+' : '') + priceChange.toFixed(2) + '%';
+                
+                // Build card HTML
+                card.innerHTML = `
+                    <div class="crypto-card-header">
+                        <div class="crypto-info">
+                            <img src="${coin.image}" alt="${coin.name}" class="crypto-icon">
+                            <span class="crypto-name">${coin.name}</span>
+                            <span class="crypto-symbol">${coin.symbol.toUpperCase()}</span>
+                        </div>
+                        <div class="crypto-rank">#${coin.market_cap_rank}</div>
+                    </div>
+                    <div class="crypto-price">${formattedPrice}</div>
+                    <span class="crypto-change ${changeClass}">${priceChangeFormatted}</span>
+                    <div class="crypto-chart-container">
+                        <canvas class="crypto-chart" data-id="${coin.id}"></canvas>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                
+                // Create chart for this coin
+                createCoinChart(coin, card.querySelector(`.crypto-chart[data-id="${coin.id}"]`));
+            });
+        }
+        
+        // Function to create price chart for a coin - improved to fix visual glitch
+        function createCoinChart(coin, canvas) {
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            let prices = coin.sparkline_in_7d?.price || [];
+            
+            // Skip chart if no price data
+            if (prices.length === 0) return;
+            
+            // Filter out any null or undefined values that might cause rendering issues
+            prices = prices.filter(price => price !== null && price !== undefined);
+            
+            // Ensure we have valid price data
+            if (prices.length < 2) return;
+            
+            const isPositive = prices[prices.length - 1] >= prices[0];
+            const chartColor = isPositive ? '#4daf7c' : '#e63946';
+            
+            try {
+                // Destroy any existing chart on this canvas to prevent memory leaks
+                const existingChart = Chart.getChart(canvas);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(prices.length).fill(''),
+                        datasets: [{
+                            data: prices,
+                            borderColor: chartColor,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.1,     // Reduced tension for smoother lines
+                            fill: false,
+                            cubicInterpolationMode: 'monotone', // Prevents overshooting
+                            spanGaps: true    // Handles missing data points
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            x: { 
+                                display: false,
+                                grid: { display: false }
+                            },
+                            y: { 
+                                display: false,
+                                grid: { display: false },
+                                // Add min/max to stabilize the chart display
+                                min: Math.min(...prices) * 0.98,
+                                max: Math.max(...prices) * 1.02
+                            }
+                        },
+                        elements: {
+                            line: { 
+                                tension: 0.1 // Consistent with dataset config
+                            },
+                            point: {
+                                radius: 0  // No points to reduce visual noise
+                            }
+                        },
+                        animation: false, // Disable animation for smoother initial render
+                        devicePixelRatio: 2 // Higher resolution rendering
+                    }
+                });
+            } catch (err) {
+                console.error('Error creating chart:', err);
+            }
+        }
+        
+        // Add market data functions
+        async function fetchMarketData() {
+            try {
+                // Try CoinGecko API
+                let response = await fetch('https://api.coingecko.com/api/v3/global');
+                
+                // Check if response is ok
+                if (!response.ok) {
+                    throw new Error('CoinGecko API error');
+                }
+                
+                const data = await response.json();
+                
+                // Format market cap (abbreviate to B or T)
+                const formatLargeNumber = (num) => {
+                    if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+                    if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+                    if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+                    return num.toLocaleString();
+                };
+                
+                // Get total market cap and 24h volume
+                if (data && data.data) {
+                    const totalMarketCap = data.data.total_market_cap.usd;
+                    const totalVolume = data.data.total_volume.usd;
+                    
+                    // Format and display data
+                    document.getElementById('total-market-cap').innerText = '$' + formatLargeNumber(totalMarketCap);
+                    document.getElementById('total-volume').innerText = '$' + formatLargeNumber(totalVolume);
+                    
+                    // Get BTC dominance data if available
+                    if (data.data.market_cap_percentage && data.data.market_cap_percentage.btc) {
+                        const btcDominance = data.data.market_cap_percentage.btc;
+                        document.getElementById('btc-dominance').innerText = `${btcDominance.toFixed(2)}%`;
+                    } else {
+                        document.getElementById('btc-dominance').innerText = '59.68%';
+                    }
+                } else {
+                    throw new Error('Invalid data format');
+                }
+            } catch (error) {
+                console.error('Error fetching market data:', error);
+                // Fallback to static values
+                document.getElementById('total-market-cap').innerText = '$2.42T';
+                document.getElementById('total-volume').innerText = '$78.5B';
+                document.getElementById('btc-dominance').innerText = '59.68%';
+            }
+        }
+
+        async function fetchFearGreedIndex() {
+            try {
+                const response = await fetch('https://api.alternative.me/fng/');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                
+                if (data && data.data && data.data[0]) {
+                    const value = parseInt(data.data[0].value);
+                    const classification = data.data[0].value_classification;
+                    
+                    // Update the gauge marker position based on the value (0-100)
+                    const markerPosition = value + '%';
+                    document.querySelector('.gauge-marker').style.left = markerPosition;
+                    
+                    // Update the gauge label
+                    document.getElementById('fear-greed-value').innerText = `${value} - ${classification}`;
+                    
+                    // Add class based on the sentiment
+                    const fearGreedCard = document.querySelector('.market-data-card.fear-greed');
+                    fearGreedCard.classList.remove('extreme-fear', 'fear', 'neutral', 'greed', 'extreme-greed');
+                    
+                    if (value <= 20) {
+                        fearGreedCard.classList.add('extreme-fear');
+                    } else if (value <= 40) {
+                        fearGreedCard.classList.add('fear');
+                    } else if (value <= 60) {
+                        fearGreedCard.classList.add('neutral');
+                    } else if (value <= 80) {
+                        fearGreedCard.classList.add('greed');
+                    } else {
+                        fearGreedCard.classList.add('extreme-greed');
+                    }
+                } else {
+                    throw new Error('Invalid data format');
+                }
+            } catch (error) {
+                console.error('Error fetching Fear & Greed index:', error);
+                document.getElementById('fear-greed-value').innerText = 'N/A';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Existing code for crypto cards
+            fetchCryptoData();
+            
+            // Fetch market data and fear/greed index
+            fetchMarketData();
+            fetchFearGreedIndex();
+            
+            // Set interval to refresh data every 5 minutes
+            setInterval(() => {
+                fetchMarketData();
+                fetchFearGreedIndex();
+            }, 5 * 60 * 1000);
+            
+            // Sort dropdown functionality
+            const sortButton = document.getElementById('sortButton');
+            const sortDropdown = document.getElementById('sortDropdown');
+            const sortOptions = document.querySelectorAll('.sort-option');
+            
+            // Toggle dropdown on button click
+            sortButton.addEventListener('click', function() {
+                sortDropdown.classList.toggle('expanded');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.sort-container')) {
+                    sortDropdown.classList.remove('expanded');
+                }
+            });
+            
+            // Handle sort option selection
+            sortOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    sortOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Update button label
+                    sortButton.querySelector('.label').textContent = this.textContent;
+                    
+                    // Get the selected time period
+                    const period = this.getAttribute('data-period');
+                    
+                    // Here you would implement the actual sorting logic
+                    console.log('Sort by:', period);
+                    
+                    // Close the dropdown
+                    sortDropdown.classList.remove('expanded');
+                });
+            });
+            
+            // Handle search input
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                // Here you would implement the search functionality
+                console.log('Search term:', searchTerm);
+                
+                // Example implementation could filter the crypto cards
+                const cards = document.querySelectorAll('.crypto-card');
+                cards.forEach(card => {
+                    const name = card.querySelector('.crypto-name').textContent.toLowerCase();
+                    const symbol = card.querySelector('.crypto-symbol').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || symbol.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

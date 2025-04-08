@@ -6,10 +6,8 @@
     <title>Responsive Navigation</title>
     <!-- Add Google Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Add Material Symbols Outlined -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <!-- Add Material Symbols Outlined with sort icon -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=sort" />
+    <!-- Replace all Material Symbols links with this comprehensive one -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" />
     <style>
         * {
             margin: 0;
@@ -107,6 +105,36 @@
         .nav-button .material-icons,
         .nav-button .material-symbols-outlined {
             font-size: 24px;
+        }
+        
+        /* Fix for Material Symbols icons */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+            font-family: 'Material Symbols Outlined';
+            font-style: normal;
+            /* Ensure minimum size even if icon fails to load */
+            min-width: 24px;
+            min-height: 24px;
+            text-align: center;
+        }
+        
+        /* Specific fix for sort icon */
+        .sort-button .material-symbols-outlined {
+            font-size: 18px;
+        }
+        
+        /* Fix for search icon */
+        .search-box .material-symbols-outlined {
+            font-size: 15px;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
         }
         
         /* Additional styles to ensure Material Symbols appear properly */
@@ -938,6 +966,29 @@
                     }
                 });
             });
+            
+            // Add icon loading check
+            console.log("Checking Material Symbols loading...");
+            setTimeout(() => {
+                const icons = document.querySelectorAll('.material-symbols-outlined');
+                icons.forEach(icon => {
+                    // Check if the computed width is reasonable
+                    const styles = window.getComputedStyle(icon);
+                    const width = parseFloat(styles.width);
+                    if (width < 5) {
+                        console.warn('Material Symbol may not be loading correctly:', icon.textContent);
+                        // Apply an inline text fallback
+                        switch(icon.textContent.trim()) {
+                            case 'sort': icon.textContent = '↕'; break;
+                            case 'search': icon.textContent = '🔍'; break;
+                            case 'settings': icon.textContent = '⚙️'; break;
+                            case 'home': icon.textContent = '🏠'; break;
+                            case 'widgets': icon.textContent = '🔲'; break;
+                            case 'person': icon.textContent = '👤'; break;
+                        }
+                    }
+                });
+            }, 1000); // Wait 1 second for fonts to load
         });
     </script>
 </body>

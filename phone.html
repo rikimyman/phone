@@ -168,7 +168,7 @@
         .market-section-mobile {
             display: none;
             width: 100%;
-            padding: 20px 15px;
+            padding: 20px 0px;
             box-sizing: border-box;
         }
         
@@ -588,9 +588,33 @@
             }
             
             .search-box {
-                width: 70%;
+                width: 40%;
             }
         }
+        /* Stats button styling */
+.stats-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.stats-button .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.stats-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
     </style>
 </head>
 <body>
@@ -670,11 +694,10 @@
                 </div>
             </div>
             
-            <!-- Search box -->
-            <div class="search-box">
-                <span class="material-symbols-outlined search-icon">search</span>
-                <input type="text" class="search-input" placeholder="Search...">
-            </div>
+           <!-- Stats icon button -->
+<button class="stats-button" aria-label="Statistics">
+    <span class="material-symbols-outlined">query_stats</span>
+</button>
         </div>
         
         <!-- Crypto cards container -->

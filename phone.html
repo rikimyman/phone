@@ -744,6 +744,32 @@
     font-weight: 500;
     color: #333;
 }
+
+/* Reset filter button styling */
+.reset-filter-button {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-left: auto;
+}
+
+.reset-filter-button .material-symbols-outlined {
+    margin-right: 5px;
+    font-size: 18px;
+}
+
+.reset-filter-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
     </style>
 </head>
 <body>
@@ -1336,14 +1362,44 @@ function displaySearchResults(coins) {
         
         // Add click event
         resultItem.addEventListener('click', function() {
-            // Here you would typically navigate to a coin detail page
-            console.log(`Selected coin: ${coin.name}`);
+            // Filter to show only this coin
+            filterCryptoCards(coin.id);
             
-            // For now, just close the modal
+            // Close the modal
             searchModal.classList.remove('active');
         });
         
         searchResults.appendChild(resultItem);
+    });
+}
+
+// Function to filter crypto cards by coin ID
+function filterCryptoCards(coinId) {
+    const cards = document.querySelectorAll('.crypto-card');
+    
+    // Show "all coins" button if it doesn't exist
+    let resetFilterButton = document.getElementById('reset-filter-button');
+    if (!resetFilterButton) {
+        resetFilterButton = document.createElement('button');
+        resetFilterButton.id = 'reset-filter-button';
+        resetFilterButton.className = 'reset-filter-button';
+        resetFilterButton.innerHTML = '<span class="material-symbols-outlined">filter_alt_off</span>Show All Coins';
+        resetFilterButton.addEventListener('click', function() {
+            // Show all cards
+            cards.forEach(card => card.style.display = '');
+            // Remove the reset button
+            this.remove();
+        });
+        document.querySelector('.market-controls-row').appendChild(resetFilterButton);
+    }
+    
+    // Hide all cards except the selected one
+    cards.forEach(card => {
+        if (card.dataset.id === coinId) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
     });
 }
 

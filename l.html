@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navigation</title>
+    <!-- Add Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Replace all Material Symbols links with this comprehensive one -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            padding-top: 60px; /* Added to account for fixed top bar */
+        }
+        
+        /* Top bar styles */
+        .topbar {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: none; /* Removed shadow */
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            height: 40px;
+        }
+        
+        .logo {
+            height: 100%;
+        }
+        
+        .settings-button {
+            color: black;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .settings-button:hover {
+            background-color: transparent;
+            border: none;
+        }
+        
+
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: white; /* Ensure this is white */
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 1500;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+/* For the mobile version, ensure the background is white as well */
+@media screen and (max-width: 768px) {
+    .settings-panel {
+        background-color: white; /* Explicitly set to white for mobile */
+    }
+    
+    .settings-panel-header {
+        background-color: white; /* Ensure the header is white too */
+    }
+}
+
+        .settings-panel.active {
+            transform: translateX(0);
+        }
+
+        .settings-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-panel-header h3 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .settings-title {
+            text-align: center;
+            flex-grow: 1;
+            margin-left: 30px; /* Add 2px left margin to shift it right */
+        }
+
+        .close-settings {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            font-size: 20px;
+        }
+
+        .settings-options {
+            padding: 15px;
+        }
+
+        .settings-option {
+            margin-bottom: 15px;
+        }
+
+        .option-label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-btn.light {
+            background-color: #f9f9f9;
+        }
+
+        .theme-btn.dark {
+            background-color: #333;
+        }
+
+        .theme-btn.active {
+            border-color: #555;
+        }
+
+       /* Improved toggle switch styling for notifications only */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 26px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e0e0e0;
+    transition: .4s;
+    border-radius: 26px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+input:checked + .toggle-slider {
+    background-color: #333333; /* Black background instead of blue */
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* Dark mode styling for toggle only */
+body.dark-theme .toggle-slider {
+    background-color: #444444;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+body.dark-theme .toggle-slider:before {
+    background-color: #cccccc;
+}
+
+body.dark-theme input:checked + .toggle-slider {
+    background-color: #ffffff; /* Keep the green color in dark mode */
+}
+/* Add black border to toggle circle in dark mode */
+body.dark-theme .toggle-slider:before {
+    background-color: #ffffff;
+    border: px solid #000000; /* Add black border */
+}
+
+        /* Bottom navbar styles */
+        .navbar {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: none; /* Removed shadow */
+            z-index: 900;
+        }
+        
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .nav-button {
+            color: black;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Style for both icon types */
+        .nav-button .material-icons,
+        .nav-button .material-symbols-outlined {
+            font-size: 24px;
+        }
+        
+        /* Fix for Material Symbols icons */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+            font-family: 'Material Symbols Outlined';
+            font-style: normal;
+            /* Ensure minimum size even if icon fails to load */
+            min-width: 24px;
+            min-height: 24px;
+            text-align: center;
+        }
+        
+        /* Specific fix for sort icon */
+        .sort-button .material-symbols-outlined {
+            font-size: 18px;
+        }
+        
+        /* Fix for search icon */
+        .search-box .material-symbols-outlined {
+            font-size: 15px;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        
+        /* Additional styles to ensure Material Symbols appear properly */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            line-height: 1;
+            display: inline-block;
+        }
+        
+        .content {
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 70px; /* Added to account for bottom navbar */
+        }
+        
+        /* Media Query for phones and small devices */
+        @media screen and (max-width: 768px) {
+            /* Existing responsive styles adjusted */
+            .nav-button .material-icons,
+            .nav-button .material-symbols-outlined {
+                font-size: 24px;
+            }
+            
+            /* Remove text under icons */
+            .nav-button span:not(.material-icons):not(.material-symbols-outlined) {
+                display: none;
+            }
+        }
+
+        /* Additional styles for market cards - only visible on mobile */
+        .market-section-mobile {
+            display: none;
+            width: 100%;
+            padding: 20px 0px;
+            box-sizing: border-box;
+        }
+        
+        /* Crypto cards styling - improved responsive layout */
+        .crypto-cards-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px auto 0;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        /* Crypto card items */
+        .crypto-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-width: 0; /* Allow cards to shrink below content size */
+            overflow: hidden; /* Prevent content overflow */
+            width: 100%;
+        }
+        
+        .crypto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .crypto-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .crypto-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .crypto-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        
+        .crypto-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .crypto-symbol {
+            font-size: 12px;
+            color: #888;
+            margin-left: 4px;
+        }
+        
+        .crypto-rank {
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .crypto-price {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 4px 0;
+            color: #333;
+        }
+        
+        .crypto-change {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .crypto-change.positive {
+            background-color: rgba(77, 175, 124, 0.15);
+            color: #4daf7c;
+        }
+        
+        .crypto-change.negative {
+            background-color: rgba(230, 57, 70, 0.15);
+            color: #e63946;
+        }
+        
+        /* Chart container styling improvement */
+        .crypto-chart-container {
+            width: 100%;
+            height: 40px;
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden; /* Prevent chart from overflowing */
+            background-color: rgba(255, 255, 255, 0.05); /* Slightly visible container */
+            border-radius: 6px; /* Rounded corners for container */
+        }
+        
+        .crypto-chart {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Media query for mobile view - updated breakpoints */
+        @media screen and (max-width: 768px) {
+            .market-section-mobile {
+                display: block; /* Show only on mobile */
+            }
+            
+            .crypto-cards-container {
+                padding: 0 5px; /* Add side padding to prevent edge touching */
+            }
+            
+            /* Smaller padding for tight screens */
+            @media screen and (max-width: 350px) {
+                .crypto-card {
+                    padding: 10px 8px;
+                }
+                
+                .crypto-name {
+                    font-size: 12px;
+                }
+                
+                .crypto-symbol {
+                    font-size: 10px;
+                }
+                
+                .crypto-price {
+                    font-size: 14px;
+                    margin: 2px 0;
+                }
+                
+                .crypto-change {
+                    padding: 3px 6px;
+                    font-size: 10px;
+                }
+                
+                .crypto-chart-container {
+                    height: 35px;
+                }
+            }
+        }
+        
+        /* Only switch to single column at extremely small widths */
+        @media screen and (max-width: 200px) {
+            .crypto-cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Market data overview styles - consistent with cards */
+        .market-data-overview {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            padding: 0 5px; /* Add side padding to prevent edge touching */
+        }
+        
+        .market-data-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .market-data-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            min-width: 0; /* Allow cards to shrink below content size */
+        }
+        
+        .card-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Responsive adjustments - fixed market data rows breakpoint */
+        @media screen and (max-width: 300px) {
+            .market-data-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .market-data-card {
+                width: 100%;
+            }
+            
+            .card-value {
+                font-size: 16px; /* Slightly smaller for very small screens */
+            }
+        }
+        
+        /* Only switch crypto cards to single column at extremely small widths */
+        @media screen and (max-width: 200px) {
+            .crypto-cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Fear & Greed Index styling */
+        .gauge-container {
+            width: 100%;
+            margin-top: 4px;
+        }
+        
+        .gauge {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        
+        .gauge-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(
+                to right,
+                #e63946 0%,
+                #e66c39 25%,
+                #e6b139 50%,
+                #71e639 75%,
+                #39e655 100%
+            );
+        }
+        
+        .gauge-marker {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 2px solid #333;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            left: 50%; /* Default position */
+        }
+        
+        .gauge-label {
+            font-size: 13px;
+            text-align: center;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* Sentiment colors */
+        .market-data-card.fear-greed.extreme-fear .gauge-label {
+            color: #e63946;
+        }
+        
+        .market-data-card.fear-greed.fear .gauge-label {
+            color: #e66c39;
+        }
+        
+        .market-data-card.fear-greed.neutral .gauge-label {
+            color: #e6b139;
+        }
+        
+        .market-data-card.fear-greed.greed .gauge-label {
+            color: #71e639;
+        }
+        
+        .market-data-card.fear-greed.extreme-greed .gauge-label {
+            color: #39e655;
+        }
+        
+        /* Responsive adjustments */
+        @media screen and (max-width: 200px) {
+            .market-data-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Controls row between market data and crypto cards */
+        .market-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        /* Sort button styling */
+        .sort-button {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border: 1px solid #eee;
+            border-radius: 20px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .sort-button .material-symbols-outlined {
+            margin-right: 5px;
+            font-size: 18px;
+        }
+        
+        .sort-button:hover {
+            background-color: #f9f9f9;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        
+        /* Sort dropdown styling */
+        .sort-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 150px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            margin-top: 5px;
+        }
+        
+        .sort-dropdown.expanded {
+            max-height: 220px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .sort-option {
+            padding: 10px 15px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .sort-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .sort-option.active {
+            background-color: rgba(246, 203, 142, 0.2);
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* Right-aligned search box styling */
+        .search-box {
+            width: 30%;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 8px 10px 8px 30px;
+            border-radius: 20px;
+            border: 1px solid #eee;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #ddd;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 15px;
+        }
+        
+        /* Responsive adjustments */
+        @media screen and (max-width: 500px) {
+            .sort-button span.label {
+                display: none;
+            }
+            
+            .sort-button .material-symbols-outlined {
+                margin-right: 0;
+            }
+            
+            .search-box {
+                width: 40%;
+            }
+        }
+        /* Stats button styling */
+.stats-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.stats-button .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.stats-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+/* Search Modal Styles */
+.search-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1500;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 100px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.search-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-modal-content {
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.search-modal.active .search-modal-content {
+    transform: translateY(0);
+}
+
+.modal-search-container {
+    position: relative;
+    width: 100%;
+}
+
+.modal-search-input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+.modal-search-input:focus {
+    outline: none;
+    border-color: #aaa;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.modal-search-container .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 20px;
+}
+
+.search-results-container {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.search-results-container.active {
+    display: block;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #f8f8f8;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border-radius: 50%;
+}
+
+.search-result-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-result-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.search-result-symbol {
+    font-size: 12px;
+    color: #888;
+}
+
+.search-result-price {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Reset filter button styling */
+.reset-filter-button {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-left: auto;
+}
+
+.reset-filter-button .material-symbols-outlined {
+    margin-right: 5px;
+    font-size: 18px;
+}
+
+.reset-filter-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+/* Settings panel styling */
+.settings-panel {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 280px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1200;
+}
+
+.settings-panel.active {
+    max-height: 400px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Remove the border between settings header and content */
+body.dark-theme .settings-panel-header {
+    border-bottom-color: transparent; /* Make border transparent in dark mode */
+    background-color: #121212; /* Keep the black background */
+}
+
+.settings-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: none; /* Remove the border completely */
+}
+
+.settings-panel-header h3 {
+    font-size: 18px;
+    color: #333;
+    font-weight: 700; /* Change from 500 to 700 for bold text */
+}
+.close-settings {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #777;
+    transition: background-color 0.2s ease;
+}
+
+.close-settings:hover {
+    background-color: #f0f0f0;
+}
+
+.settings-options {
+    padding: 15px;
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.settings-option:last-child {
+    margin-bottom: 0;
+}
+
+.option-label {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Theme selector styling */
+.theme-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.theme-btn:hover {
+    transform: scale(1.1);
+}
+
+.theme-btn.light {
+    background-color: #f5f5f5;
+}
+
+.theme-btn.dark {
+    background-color: #333;
+}
+
+.theme-btn.active {
+    border-color: #007bff;
+}
+
+/* Toggle switch styling */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 22px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: #000000;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* Mobile settings panel styling */
+@media screen and (max-width: 768px) {
+    .settings-panel {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 90vh;
+        max-height: 90vh;
+        border-radius: 20px 20px 0 0;
+        transform: translateY(100%);
+        transition: transform 0.6s cubic-bezier(0.3, 0, 0.2, 1);
+        overflow-y: auto;
+    }
+    
+    .settings-panel.active {
+        transform: translateY(0);
+        opacity: 1;
+        max-height: 90vh;
+    }
+    
+    .settings-panel-header {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 10;
+        padding: 18px 15px;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .settings-options {
+        padding: 20px 15px 80px 15px; /* Add bottom padding for spacing */
+    }
+    
+    /* Add overlay background when panel is active */
+    .settings-panel::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8); /* Change to white with transparency */
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .settings-panel.active::before {
+        opacity: 1;
+    }
+    /* Add Material Symbols for external link icon */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=north_east');
+
+}
+/* Add the "UP TO DATE" indicator under version number */
+.update-status {
+    font-size: 10px;
+    color: #4daf7c;
+    background-color: rgba(77, 175, 124, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 4px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+/* Dark mode styling for the update status */
+body.dark-theme .update-status {
+    background-color: rgba(77, 175, 124, 0.2);
+    color: #6de99c;
+}
+/* Updated footer styling - move elements lower and make container smaller */
+.settings-footer {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    padding-top: 5px;
+    border-top: none; /* Remove the border-top completely */
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px; /* Reduce gap between elements */
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+.terms-service {
+    display: flex;
+    align-items: center;  /* This ensures vertical alignment */
+    justify-content: center;
+    gap: 4px; /* Reduce gap */
+    background-color: transparent;
+    padding: 4px 10px; /* Smaller padding */
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 65%; /* Slightly narrower */
+    max-width: 160px; /* Smaller max width */
+    margin: 0 auto;
+}
+
+.terms-label {
+    font-size: 11px; /* Even smaller font */
+    font-weight: 400; /* Lighter font weight */
+    color: #999; /* Lighter color */
+    text-align: center;
+    line-height: 1; /* Add this to ensure consistent line height */
+    margin-left: 5px; /* Add this to move the label 2px to the right */
+}
+
+.external-link {
+    font-size: 11px; /* Match the text size exactly */
+    color: #999; /* Match text color */
+    display: inline-flex; /* Better control over alignment */
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* Consistent with text */
+    margin-top: 0.5px; /* Tiny adjustment to perfectly align */
+}
+/* Update the styling for version info and update status */
+.version-info {
+    margin-top: 2px;
+    padding: 2px 10px;
+    background-color: transparent;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.version-number {
+    font-size: 10px;
+    color: #bbb;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 4px; /* Add space between version and status */
+}
+
+.update-status {
+    font-size: 10px;
+    color: #4daf7c;
+    background-color: rgba(77, 175, 124, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    font-weight: 500;
+}
+/* Improved "UP TO DATE" indicator styling */
+.update-status {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #4daf7c;
+    background-color: rgba(77, 175, 124, 0.08);
+    padding: 3px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-top: 5px;
+    border: 1px solid rgba(77, 175, 124, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+}
+
+/* Softer dark mode styling for the update status */
+body.dark-theme .update-status {
+    background-color: rgba(77, 175, 124, 0.1);
+    color: #6de99c;
+    border-color: rgba(109, 233, 156, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+/* For mobile version, ensure proper positioning */
+@media screen and (max-width: 768px) {
+    .settings-footer {
+        bottom: 20px; /* Position closer to bottom on mobile */
+    }
+}
+
+/* Remove the spacer div since we're using absolute positioning */
+.settings-options > div[style="height: 100px;"] {
+    display: none;
+}
+
+/* Updated language selector styling */
+.language-selector {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 125px; /* Set fixed width */
+    height: 36px; /* Match the toggle height */
+}
+
+.language-dropdown {
+    width: 100%;
+    padding: 7px 30px 7px 12px;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    font-size: 13px;
+    color: #555;
+    background-color: white;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.language-dropdown:hover {
+    border-color: #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.language-dropdown:focus {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #888;
+    pointer-events: none;
+}
+
+/* Fix settings options spacing and alignment */
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 5px;
+}
+
+.option-label {
+    font-size: 14px;
+    color: #444;
+    font-weight: 500;
+}
+
+/* Mobile adjustments for language selector */
+@media screen and (max-width: 768px) {
+    .language-dropdown {
+        padding: 8px 30px 8px 12px;
+        font-size: 14px;
+        border-radius: 20px;
+    }
+    
+    .language-selector {
+        width: 140px; /* Slightly wider on mobile */
+        height: 38px;
+    }
+    
+    .dropdown-arrow {
+        right: 12px;
+        font-size: 20px;
+    }
+}
+/* ...DARK MODE STYLES... */
+/* Additional dark mode styles for all components */
+
+/* Basic dark theme for body and text */
+body.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Top bar and navbar in dark mode */
+body.dark-theme .topbar,
+body.dark-theme .navbar {
+    background-color: #1a1a1a;
+    border-color: #333333;
+}
+
+/* Settings button in dark mode */
+body.dark-theme .settings-button {
+    color: #ffffff;
+}
+
+/* Content area in dark mode */
+body.dark-theme .content {
+    background-color: #121212;
+}
+
+/* Market data cards in dark mode */
+body.dark-theme .market-data-card {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .card-label {
+    color: #aaaaaa;
+}
+
+body.dark-theme .card-value {
+    color: #ffffff;
+}
+
+/* Crypto cards in dark mode */
+body.dark-theme .crypto-card {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .crypto-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    background-color: #252525;
+}
+
+/* Change color states for positive/negative values in dark mode */
+body.dark-theme .crypto-change.positive {
+    background-color: rgba(77, 175, 124, 0.3);
+    color: #6de99c;
+}
+
+body.dark-theme .crypto-change.negative {
+    background-color: rgba(230, 57, 70, 0.3);
+    color: #ff6b70;
+}
+
+/* Chart container style in dark mode */
+body.dark-theme .crypto-chart-container {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Sort dropdown elements in dark mode */
+body.dark-theme .sort-dropdown {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .sort-option:hover {
+    background-color: #333333;
+}
+
+body.dark-theme .sort-option.active {
+    background-color: rgba(77, 175, 124, 0.2);
+    color: #e0e0e0;
+}
+
+/* Dark mode for search input */
+body.dark-theme .search-input {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #333333;
+}
+
+body.dark-theme .search-input:focus {
+    border-color: #4d4d4d;
+}
+
+/* Footer content in dark mode */
+body.dark-theme .settings-footer {
+    border-top-color: transparent;
+}
+
+body.dark-theme .terms-label {
+    color: #999999;
+}
+
+body.dark-theme .version-number {
+    color: #777777;
+}
+
+body.dark-theme .external-link {
+    color: #999999;
+}
+
+/* Dark mode for fear & greed gauge */
+body.dark-theme .gauge {
+    background-color: #333333;
+}
+
+/* Make sure any missing icons are visible in dark mode */
+body.dark-theme .material-symbols-outlined {
+    color: #e0e0e0;
+}
+
+/* Dark mode for dropdown menus */
+body.dark-theme select {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #333333;
+}
+
+body.dark-theme option {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+/* Handle any remaining borders consistently */
+body.dark-theme .settings-option {
+    border-bottom-color: #333333;
+}
+
+/* Handle images with dark mode filter, but not for crypto icons */
+body.dark-theme img:not(.crypto-icon):not(.search-result-icon) {
+    filter: brightness(0.8);
+}
+
+/* Make sure placeholders are visible in dark mode */
+body.dark-theme input::placeholder {
+    color: #777777;
+}
+
+/* Handle any overlay or modal backdrops */
+body.dark-theme .search-modal {
+    background-color: rgba(18, 18, 18, 0.9);
+}
+
+/* Ensure buttons and active elements have proper contrast */
+body.dark-theme button:not(.theme-btn) {
+    color: #e0e0e0;
+    background-color: #333333;
+    border-color: #444444;
+}
+
+body.dark-theme button:not(.theme-btn):hover {
+    background-color: #3a3a3a;
+}
+/* Enhanced dark mode styles with softer colors */
+body.dark-theme {
+    background-color: #121212;
+    color: #cccccc; /* Less bright base text color */
+}
+
+/* Soften text brightness for crypto elements */
+body.dark-theme .crypto-name {
+    color: #cccccc; /* Softer white for crypto names */
+}
+
+body.dark-theme .crypto-price {
+    color: #cccccc; /* Softer white for crypto prices */
+}
+
+body.dark-theme .crypto-symbol {
+    color: #999999; /* Darker gray for symbols */
+}
+
+body.dark-theme .search-result-name {
+    color: #cccccc; /* Softer white for search results */
+}
+
+body.dark-theme .search-result-price {
+    color: #cccccc; /* Softer white for search result prices */
+}
+
+body.dark-theme .modal-search-input {
+    color: #cccccc; /* Softer white for input text */
+    background-color: #1e1e1e;
+}
+
+.settings-panel-header h3 {
+    font-size: 18px;
+    color: #333;
+    font-weight: 700; /* Change from 500 to 700 for bold text */
+}
+
+/* Also ensure it's bold in dark mode */
+body.dark-theme .settings-panel-header h3 {
+    color: #cccccc; /* Maintain the soft white color */
+    font-weight: 700; /* Ensure bold in dark mode too */
+}
+
+body.dark-theme .option-label {
+    color: #cccccc; /* Softer white for option labels */
+}
+
+/* Card values also softened */
+body.dark-theme .card-value {
+    color: #cccccc; /* Softer white for card values */
+}
+
+/* Navigation buttons */
+body.dark-theme .nav-button {
+    color: #cccccc; /* Keep the softer white for text */
+    background-color: transparent !important; /* Force transparent background */
+    border-color: transparent;
+}
+
+/* Make sure material icons aren't too bright */
+body.dark-theme .material-symbols-outlined {
+    color: #cccccc; /* Softer white for icons */
+}
+/* Dark mode navbar styling */
+body.dark-theme .navbar {
+    background-color: #121212; /* Black background instead of #1a1a1a */
+    border-color: transparent;
+}
+
+/* Make icon borders transparent in dark mode */
+body.dark-theme .nav-button {
+    color: #cccccc; /* Keep the softer white for text */
+    border-color: transparent;
+    background-color: transparent;
+}
+
+body.dark-theme .nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important; /* Very subtle hover effect */
+    border-color: transparent;
+}
+
+/* Ensure settings button and other buttons have transparent borders */
+body.dark-theme .settings-button,
+body.dark-theme .sort-button,
+body.dark-theme .stats-button {
+    border-color: transparent;
+}
+
+/* Make sure settings panel is properly styled in dark mode */
+body.dark-theme .settings-panel {
+    background-color: #000000;
+    border-color: transparent;
+}
+/* Dark mode topbar styling */
+body.dark-theme .topbar {
+    background-color: #121212; /* Match the main background color */
+    border-color: transparent;
+}
+
+/* Make sure the settings button in the topbar has proper styling */
+body.dark-theme .settings-button {
+    color: #cccccc; /* Keep the softer white color */
+    background-color: transparent !important; /* Force transparent background */
+}
+
+
+body.dark-theme .settings-button:hover {
+    background-color: transparent !important; /* Force transparent on hover too */
+}
+body.dark-theme .nav-button.active {
+    background-color: transparent !important;
+}
+/* Style the logo container in dark mode */
+body.dark-theme .logo-container {
+    background-color: transparent;
+}
+/* Dark mode settings panel styling */
+body.dark-theme .settings-panel {
+    background-color: #121212; /* Black background */
+    color: #cccccc; /* Soft white text */
+    border-color: transparent;
+}
+
+body.dark-theme .settings-panel-header {
+    border-bottom-color: transparent; /* Make border transparent in dark mode */
+    background-color: #121212; /* Keep the black background */
+}
+
+body.dark-theme .settings-panel-header h3 {
+    color: #cccccc; /* Soft white title text */
+}
+
+body.dark-theme .close-settings {
+    color: #999999;
+}
+
+body.dark-theme .close-settings:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .settings-option {
+    border-bottom-color: #333333;
+}
+
+body.dark-theme .option-label {
+    color: #cccccc; /* Soft white for labels */
+}
+
+body.dark-theme .theme-btn.light {
+    background-color: #f5f5f5;
+    border-color: #333333;
+}
+
+body.dark-theme .theme-btn.dark {
+    background-color: #333333;
+    border-color: #cccccc;
+}
+
+body.dark-theme .theme-btn.active {
+    border-color: #4285f4; /* Blue border for active theme */
+}
+
+body.dark-theme .toggle-slider {
+    background-color: #444444;
+}
+
+body.dark-theme .toggle-slider:before {
+    background-color: #9f9c9c;
+}
+
+body.dark-theme .language-dropdown {
+    background-color: #1e1e1e;
+    color: #cccccc;
+    border-color: #333333;
+}
+
+/* For mobile version, ensure background is black */
+@media screen and (max-width: 768px) {
+    body.dark-theme .settings-panel {
+        background-color: #000000;
+    }
+    
+    body.dark-theme .settings-panel-header {
+        background-color: #000000;
+    }
+    
+    body.dark-theme .settings-panel::before {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Top bar with logo and settings -->
+    <div class="topbar">
+        <div class="logo-container">
+            <img src="venuth.png" alt="Logo" class="logo">
+        </div>
+        <button class="settings-button" aria-label="Settings">
+            <span class="material-symbols-outlined">settings</span>
+        </button>
+    </div>
+    
+    <!-- Settings panel -->
+    <div id="settings-panel" class="settings-panel">
+        <div class="settings-panel-header">
+            <h3 class="settings-title">Venuth Settings</h3>
+            <button class="close-settings" aria-label="Close settings">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="settings-options">
+            <div class="settings-option">
+                <span class="option-label">Theme</span>
+                <div class="theme-selector">
+                    <button class="theme-btn light active" data-theme="light"></button>
+                    <button class="theme-btn dark" data-theme="dark"></button>
+                </div>
+            </div>
+            <div class="settings-option">
+                <span class="option-label">Currency</span>
+                <div class="language-selector currency-selector">
+                    <select class="language-dropdown currency-dropdown">
+                        <option value="usd">USD ($)</option>
+                        <option value="eur">EUR (€)</option>
+                        <option value="gbp">GBP (£)</option>
+                        <option value="jpy">JPY (¥)</option>
+                        <option value="cny">CNY (¥)</option>
+                        <option value="inr">INR (₹)</option>
+                        <option value="aud">AUD ($)</option>
+                        <option value="cad">CAD ($)</option>
+                        <option value="chf">CHF (Fr)</option>
+                        <option value="btc">BTC (₿)</option>
+                    </select>
+                    <span class="material-symbols-outlined dropdown-arrow">arrow_drop_down</span>
+                </div>
+            </div>
+            <div class="settings-option">
+                <span class="option-label">Language</span>
+                <div class="language-selector">
+                    <select class="language-dropdown">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="it">Italiano</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                        <option value="ru">Русский</option>
+                        <option value="pt">Português</option>
+                    </select>
+                    <span class="material-symbols-outlined dropdown-arrow">arrow_drop_down</span>
+                </div>
+            </div>
+            <div class="settings-option">
+                <span class="option-label">Notifications</span>
+                <label class="toggle">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Add spacer div to push footer down -->
+            <div style="height: 100px;"></div>
+        </div>
+        
+        <div class="settings-footer">
+            <div class="footer-content">
+                <div class="terms-service">
+                    <span class="terms-label">Terms of Service</span>
+                    <span class="material-symbols-outlined external-link">north_east</span>
+                </div>
+                
+                <div class="version-info">
+                    <span class="version-number">Venuth Version 1.2.0</span>
+                    <div class="update-status">UP TO DATE</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom navigation bar -->
+    <nav class="navbar">
+        <div class="nav-items">
+            <button class="nav-button" aria-label="Home">
+                <span class="material-symbols-outlined">home</span>
+            </button>
+            <button class="nav-button" aria-label="Widgets">
+                <span class="material-symbols-outlined">widgets</span>
+            </button>
+            <button class="nav-button" aria-label="AI">
+                <img src="venuth.png" alt="Zenus" height="24">
+            </button>
+            <button class="nav-button" aria-label="Profile">
+                <span class="material-symbols-outlined">person</span>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <!-- Market data panels (visible on all screen sizes) -->
+        <div class="market-data-overview">
+            <div class="market-data-row">
+                <div class="market-data-card mcap">
+                    <div class="card-label">Market Cap</div>
+                    <div class="card-value" id="total-market-cap">...</div>
+                </div>
+                <div class="market-data-card volume">
+                    <div class="card-label">24h Volume</div>
+                    <div class="card-value" id="total-volume">...</div>
+                </div>
+            </div>
+            <div class="market-data-row">
+                <div class="market-data-card btc-dom">
+                    <div class="card-label">BTC Dominance</div>
+                    <div class="card-value" id="btc-dominance">...</div>
+                </div>
+                <div class="market-data-card fear-greed">
+                    <div class="card-label">Fear Index</div>
+                    <div class="gauge-container">
+                        <div class="gauge">
+                            <div class="gauge-fill"></div>
+                            <div class="gauge-marker"></div>
+                        </div>
+                        <div class="gauge-label" id="fear-greed-value">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls row with sort and search -->
+        <div class="market-controls-row">
+            <!-- Sort button and dropdown -->
+            <div class="sort-container">
+                <button class="sort-button" id="sortButton">
+                    <span class="material-symbols-outlined">sort</span>
+                    <span class="label">Trending</span>
+                </button>
+                <div class="sort-dropdown" id="sortDropdown">
+                    <div class="sort-option active" data-period="trending">Trending</div>
+                    <div class="sort-option" data-period="1h">1 Hour</div>
+                    <div class="sort-option" data-period="4h">4 Hours</div>
+                    <div class="sort-option" data-period="1d">1 Day</div>
+                    <div class="sort-option" data-period="7d">7 Days</div>
+                </div>
+            </div>
+            
+           <!-- Stats icon button -->
+<button class="stats-button" aria-label="Statistics">
+    <span class="material-symbols-outlined">query_stats</span>
+</button>
+<!-- Search modal overlay -->
+<div id="search-modal" class="search-modal">
+    <div class="search-modal-content">
+        <div class="modal-search-container">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input type="text" id="modal-search-input" class="modal-search-input" placeholder="Search coins...">
+        </div>
+        <div class="search-results-container" id="search-results">
+            <!-- Search results will appear here -->
+        </div>
+    </div>
+</div>
+        </div>
+        
+        <!-- Crypto cards container -->
+        <div class="market-section-mobile">
+            <div id="crypto-cards-container" class="crypto-cards-container">
+                <!-- Cards will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Chart.js for crypto charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+
+// Terms of Service click handler
+document.querySelector('.terms-service').addEventListener('click', function() {
+    // Open terms of service page - replace with your actual URL
+    window.open('https://venuth.com/terms', '_blank');
+});
+
+        // Settings panel functionality
+const settingsButton = document.querySelector('.settings-button');
+const settingsPanel = document.getElementById('settings-panel');
+const closeSettingsBtn = document.querySelector('.close-settings');
+const themeButtons = document.querySelectorAll('.theme-btn');
+
+// Toggle settings panel
+settingsButton.addEventListener('click', function() {
+    settingsPanel.classList.add('active');
+    event.stopPropagation(); // Prevent document click from immediately closing
+});
+
+// Close settings panel when clicking X
+closeSettingsBtn.addEventListener('click', function() {
+    settingsPanel.classList.remove('active');
+});
+
+// Close settings when clicking outside
+document.addEventListener('click', function(event) {
+    if (settingsPanel.classList.contains('active') && 
+        !settingsPanel.contains(event.target) && 
+        !settingsButton.contains(event.target)) {
+        settingsPanel.classList.remove('active');
+    }
+});
+
+// Theme selection
+// ...existing code...
+
+// Theme selection
+themeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove active class from all theme buttons
+        themeButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Get the selected theme
+        const selectedTheme = this.getAttribute('data-theme');
+        
+        // Toggle dark mode
+        if (selectedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+        }
+    });
+});
+        // Function to fetch crypto data and create cards
+        async function fetchCryptoData() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=true');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const data = await response.json();
+                createCryptoCards(data);
+            } catch (error) {
+                console.error('Error fetching crypto data:', error);
+                // Use sample data as fallback
+                createCryptoCardsWithSampleData();
+            }
+        }
+        
+        // Function to create crypto cards with sample data (fallback)
+        function createCryptoCardsWithSampleData() {
+            const sampleData = [
+                { id: 'bitcoin', symbol: 'btc', name: 'Bitcoin', image: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', current_price: 68423, market_cap_rank: 1, price_change_percentage_24h: 2.5, sparkline_in_7d: { price: generateFakeSparkline(true) } },
+                { id: 'ethereum', symbol: 'eth', name: 'Ethereum', image: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', current_price: 3498, market_cap_rank: 2, price_change_percentage_24h: 1.8, sparkline_in_7d: { price: generateFakeSparkline(true) } },
+                { id: 'tether', symbol: 'usdt', name: 'Tether', image: 'https://assets.coingecko.com/coins/images/325/small/Tether.png', current_price: 1.00, market_cap_rank: 3, price_change_percentage_24h: 0.05, sparkline_in_7d: { price: generateFakeSparkline(true) } },
+                { id: 'binancecoin', symbol: 'bnb', name: 'Binance Coin', image: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png', current_price: 575, market_cap_rank: 4, price_change_percentage_24h: -1.2, sparkline_in_7d: { price: generateFakeSparkline(false) } }
+            ];
+            
+            createCryptoCards(sampleData);
+        }
+        
+        // Helper function to generate fake sparkline data - fixed to prevent falling glitch
+        function generateFakeSparkline(uptrend) {
+            const prices = [];
+            let baseValue = 100;
+            const volatility = uptrend ? 2 : 2.5; // Control volatility
+            const trend = uptrend ? 0.8 : -0.8;   // Control trend direction
+            
+            for (let i = 0; i < 24; i++) {
+                // Add small random movement + slight trend bias
+                baseValue += (Math.random() * volatility - (volatility / 2)) + trend;
+                // Ensure value doesn't go below a reasonable minimum
+                baseValue = Math.max(baseValue, 70);
+                prices.push(baseValue);
+            }
+            
+            return prices;
+        }
+        
+        // Function to create crypto cards
+        function createCryptoCards(data) {
+            const container = document.getElementById('crypto-cards-container');
+            container.innerHTML = ''; // Clear any existing cards
+            
+            data.forEach(coin => {
+                // Create card element
+                const card = document.createElement('div');
+                card.className = 'crypto-card';
+                card.dataset.id = coin.id;
+                card.dataset.symbol = coin.symbol;
+                
+                // Format price with appropriate decimal places
+                let formattedPrice;
+                if (coin.current_price >= 1000) {
+                    formattedPrice = '$' + coin.current_price.toLocaleString();
+                } else if (coin.current_price >= 1) {
+                    formattedPrice = '$' + coin.current_price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                } else {
+                    formattedPrice = '$' + coin.current_price.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 6});
+                }
+                
+                // Determine if price change is positive or negative
+                const priceChange = coin.price_change_percentage_24h || 0;
+                const changeClass = priceChange >= 0 ? 'positive' : 'negative';
+                const priceChangeFormatted = (priceChange >= 0 ? '+' : '') + priceChange.toFixed(2) + '%';
+                
+                // Build card HTML
+                card.innerHTML = `
+                    <div class="crypto-card-header">
+                        <div class="crypto-info">
+                            <img src="${coin.image}" alt="${coin.name}" class="crypto-icon">
+                            <span class="crypto-name">${coin.name}</span>
+                            <span class="crypto-symbol">${coin.symbol.toUpperCase()}</span>
+                        </div>
+                        <div class="crypto-rank">#${coin.market_cap_rank}</div>
+                    </div>
+                    <div class="crypto-price">${formattedPrice}</div>
+                    <span class="crypto-change ${changeClass}">${priceChangeFormatted}</span>
+                    <div class="crypto-chart-container">
+                        <canvas class="crypto-chart" data-id="${coin.id}"></canvas>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                
+                // Create chart for this coin
+                createCoinChart(coin, card.querySelector(`.crypto-chart[data-id="${coin.id}"]`));
+            });
+        }
+        
+        // Function to create price chart for a coin - improved to fix visual glitch
+        function createCoinChart(coin, canvas) {
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            let prices = coin.sparkline_in_7d?.price || [];
+            
+            // Skip chart if no price data
+            if (prices.length === 0) return;
+            
+            
+            // Ensure we have valid price data
+            if (prices.length < 2) return;
+            
+            const isPositive = prices[prices.length - 1] >= prices[0];
+            const chartColor = isPositive ? '#4daf7c' : '#e63946';
+            
+            try {
+                // Destroy any existing chart on this canvas to prevent memory leaks
+                const existingChart = Chart.getChart(canvas);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(prices.length).fill(''),
+                        datasets: [{
+                            data: prices,
+                            borderColor: chartColor,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.1,     // Reduced tension for smoother lines
+                            fill: false,
+                            cubicInterpolationMode: 'monotone', // Prevents overshooting
+                            spanGaps: true    // Handles missing data points
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            x: { 
+                                display: false,
+                                grid: { display: false }
+                            },
+                            y: { 
+                                display: false,
+                                grid: { display: false },
+                                // Add min/max to stabilize the chart display
+                                min: Math.min(...prices) * 0.98,
+                                max: Math.max(...prices) * 1.02
+                            }
+                        },
+                        elements: {
+                            line: { 
+                                tension: 0.1 // Consistent with dataset config
+                            },
+                            point: {
+                                radius: 0  // No points to reduce visual noise
+                            }
+                        },
+                        animation: false, // Disable animation for smoother initial render
+                        devicePixelRatio: 2 // Higher resolution rendering
+                    }
+                });
+            } catch (err) {
+                console.error('Error creating chart:', err);
+            }
+        }
+        
+        // Add market data functions
+        async function fetchMarketData() {
+            try {
+                // Try CoinGecko API
+                let response = await fetch('https://api.coingecko.com/api/v3/global');
+                
+                // Check if response is ok
+                if (!response.ok) {
+                    throw new Error('CoinGecko API error');
+                }
+                
+                const data = await response.json();
+                
+                // Format market cap (abbreviate to B or T)
+                const formatLargeNumber = (num) => {
+                    if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+                    if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+                    if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+                    return num.toLocaleString();
+                };
+                
+                // Get total market cap and 24h volume
+                if (data && data.data) {
+                    const totalMarketCap = data.data.total_market_cap.usd;
+                    const totalVolume = data.data.total_volume.usd;
+                    
+                    // Format and display data
+                    document.getElementById('total-market-cap').innerText = '$' + formatLargeNumber(totalMarketCap);
+                    document.getElementById('total-volume').innerText = '$' + formatLargeNumber(totalVolume);
+                    
+                    // Get BTC dominance data if available
+                    if (data.data.market_cap_percentage && data.data.market_cap_percentage.btc) {
+                        const btcDominance = data.data.market_cap_percentage.btc;
+                        document.getElementById('btc-dominance').innerText = `${btcDominance.toFixed(2)}%`;
+                    } else {
+                        document.getElementById('btc-dominance').innerText = '59.68%';
+                    }
+                } else {
+                    throw new Error('Invalid data format');
+                }
+            } catch (error) {
+                console.error('Error fetching market data:', error);
+                // Fallback to static values
+                document.getElementById('total-market-cap').innerText = '$2.42T';
+                document.getElementById('total-volume').innerText = '$78.5B';
+                document.getElementById('btc-dominance').innerText = '59.68%';
+            }
+        }
+
+        async function fetchFearGreedIndex() {
+            try {
+                const response = await fetch('https://api.alternative.me/fng/');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                
+                if (data && data.data && data.data[0]) {
+                    const value = parseInt(data.data[0].value);
+                    const classification = data.data[0].value_classification;
+                    
+                    // Update the gauge marker position based on the value (0-100)
+                    const markerPosition = value + '%';
+                    document.querySelector('.gauge-marker').style.left = markerPosition;
+                    
+                    // Update the gauge label
+                    document.getElementById('fear-greed-value').innerText = `${value} - ${classification}`;
+                    
+                    // Add class based on the sentiment
+                    const fearGreedCard = document.querySelector('.market-data-card.fear-greed');
+                    fearGreedCard.classList.remove('extreme-fear', 'fear', 'neutral', 'greed', 'extreme-greed');
+                    
+                    if (value <= 20) {
+                        fearGreedCard.classList.add('extreme-fear');
+                    } else if (value <= 40) {
+                        fearGreedCard.classList.add('fear');
+                    } else if (value <= 60) {
+                        fearGreedCard.classList.add('neutral');
+                    } else if (value <= 80) {
+                        fearGreedCard.classList.add('greed');
+                    } else {
+                        fearGreedCard.classList.add('extreme-greed');
+                    }
+                } else {
+                    throw new Error('Invalid data format');
+                }
+            } catch (error) {
+                console.error('Error fetching Fear & Greed index:', error);
+                document.getElementById('fear-greed-value').innerText = 'N/A';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Existing code for crypto cards
+            fetchCryptoData();
+            
+            // Fetch market data and fear/greed index
+            fetchMarketData();
+            fetchFearGreedIndex();
+            
+            // Set interval to refresh data every 5 minutes
+            setInterval(() => {
+                fetchMarketData();
+                fetchFearGreedIndex();
+            }, 5 * 60 * 1000);
+            
+            // Sort dropdown functionality
+            const sortButton = document.getElementById('sortButton');
+            const sortDropdown = document.getElementById('sortDropdown');
+            const sortOptions = document.querySelectorAll('.sort-option');
+            
+            // Toggle dropdown on button click
+            sortButton.addEventListener('click', function() {
+                sortDropdown.classList.toggle('expanded');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.sort-container')) {
+                    sortDropdown.classList.remove('expanded');
+                }
+            });
+            
+            // Handle sort option selection
+            sortOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    sortOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Update button label
+                    sortButton.querySelector('.label').textContent = this.textContent;
+                    
+                    // Get the selected time period
+                    const period = this.getAttribute('data-period');
+                    
+                    // Here you would implement the actual sorting logic
+                    console.log('Sort by:', period);
+                    
+                    // Close the dropdown
+                    sortDropdown.classList.remove('expanded');
+                });
+            });
+            
+            // Handle search input
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                // Here you would implement the search functionality
+                console.log('Search term:', searchTerm);
+                
+                // Example implementation could filter the crypto cards
+                const cards = document.querySelectorAll('.crypto-card');
+                cards.forEach(card => {
+                    const name = card.querySelector('.crypto-name').textContent.toLowerCase();
+                    const symbol = card.querySelector('.crypto-symbol').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || symbol.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Add icon loading check
+            console.log("Checking Material Symbols loading...");
+            setTimeout(() => {
+                const icons = document.querySelectorAll('.material-symbols-outlined');
+                icons.forEach(icon => {
+                    // Check if the computed width is reasonable
+                    const styles = window.getComputedStyle(icon);
+                    const width = parseFloat(styles.width);
+                    if (width < 5) {
+                        console.warn('Material Symbol may not be loading correctly:', icon.textContent);
+                        // Apply an inline text fallback
+                        switch(icon.textContent.trim()) {
+                            case 'sort': icon.textContent = '↕'; break;
+                            case 'search': icon.textContent = '🔍'; break;
+                            case 'settings': icon.textContent = '⚙️'; break;
+                            case 'home': icon.textContent = '🏠'; break;
+                            case 'widgets': icon.textContent = '🔲'; break;
+                            case 'person': icon.textContent = '👤'; break;
+                        }
+                    }
+                });
+            }, 1000); // Wait 1 second for fonts to load
+
+            // Settings panel functionality
+            const settingsButton = document.querySelector('.settings-button');
+            const settingsPanel = document.getElementById('settings-panel');
+            const closeSettingsButton = document.querySelector('.close-settings');
+
+            settingsButton.addEventListener('click', function() {
+                settingsPanel.classList.add('active');
+            });
+
+            closeSettingsButton.addEventListener('click', function() {
+                settingsPanel.classList.remove('active');
+            });
+
+            // Theme selector functionality
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            themeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    themeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const selectedTheme = this.dataset.theme;
+                    document.body.setAttribute('data-theme', selectedTheme);
+                });
+            });
+        });
+        // Search modal functionality
+const statsButton = document.querySelector('.stats-button');
+const searchModal = document.getElementById('search-modal');
+const modalSearchInput = document.getElementById('modal-search-input');
+const searchResults = document.getElementById('search-results');
+
+// Global variable to store coin data
+let allCoinsData = [];
+
+// Function to fetch all coins for search
+async function fetchAllCoins() {
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/coins/list');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        allCoinsData = await response.json();
+        // Limit to first 1000 coins for performance
+        allCoinsData = allCoinsData.slice(0, 1000);
+    } catch (error) {
+        console.error('Error fetching coin list:', error);
+        // Sample data as fallback
+        allCoinsData = [
+            { id: 'bitcoin', symbol: 'btc', name: 'Bitcoin' },
+            { id: 'ethereum', symbol: 'eth', name: 'Ethereum' },
+            { id: 'tether', symbol: 'usdt', name: 'Tether' },
+            { id: 'binancecoin', symbol: 'bnb', name: 'BNB' },
+            { id: 'ripple', symbol: 'xrp', name: 'XRP' }
+        ];
+    }
+}
+
+// Call this when the page loads
+fetchAllCoins();
+
+// Show search modal when stats button is clicked
+statsButton.addEventListener('click', function() {
+    searchModal.classList.add('active');
+    modalSearchInput.focus();
+});
+
+// Close modal when clicking outside the search box
+searchModal.addEventListener('click', function(event) {
+    if (event.target === searchModal) {
+        searchModal.classList.remove('active');
+    }
+});
+
+// Filter coins as user types
+modalSearchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    
+    // Only show results container if there's search input
+    if (searchTerm.length > 0) {
+        searchResults.classList.add('active');
+        
+        // Filter coins that match the search term
+        const matchedCoins = allCoinsData.filter(coin => 
+            coin.name.toLowerCase().includes(searchTerm) || 
+            coin.symbol.toLowerCase().includes(searchTerm)
+        ).slice(0, 10); // Limit to 10 results
+        
+        // Display matched coins
+        displaySearchResults(matchedCoins);
+    } else {
+        searchResults.classList.remove('active');
+        searchResults.innerHTML = '';
+    }
+});
+
+// Function to display search results
+function displaySearchResults(coins) {
+    searchResults.innerHTML = '';
+    
+    if (coins.length === 0) {
+        searchResults.innerHTML = '<div class="search-result-item">No coins found</div>';
+        return;
+    }
+    
+    coins.forEach(coin => {
+        // Try to get coin image and price from existing data
+        let coinImage = `https://assets.coingecko.com/coins/images/1/small/bitcoin.png`; // Default
+        let coinPrice = 'Loading...';
+        
+        // Check if we have this coin in our displayed cards
+        const displayedCoin = document.querySelector(`.crypto-card[data-id="${coin.id}"]`);
+        if (displayedCoin) {
+            // Extract price from existing card
+            const priceElement = displayedCoin.querySelector('.crypto-price');
+            if (priceElement) {
+                coinPrice = priceElement.textContent;
+            }
+            
+            // Extract image from existing card
+            const imgElement = displayedCoin.querySelector('.crypto-icon');
+            if (imgElement) {
+                coinImage = imgElement.src;
+            }
+        }
+        
+        // Create result item
+        const resultItem = document.createElement('div');
+        resultItem.className = 'search-result-item';
+        resultItem.dataset.id = coin.id;
+        
+        resultItem.innerHTML = `
+            <img src="${coinImage}" alt="${coin.name}" class="search-result-icon" onerror="this.src='https://assets.coingecko.com/coins/images/1/small/bitcoin.png'">
+            <div class="search-result-info">
+                <span class="search-result-name">${coin.name}</span>
+                <span class="search-result-symbol">${coin.symbol.toUpperCase()}</span>
+            </div>
+            <span class="search-result-price">${coinPrice}</span>
+        `;
+        
+        // Add click event
+        resultItem.addEventListener('click', function() {
+            // Filter to show only this coin
+            filterCryptoCards(coin.id);
+            
+            // Close the modal
+            searchModal.classList.remove('active');
+        });
+        
+        searchResults.appendChild(resultItem);
+    });
+}
+
+// Function to filter crypto cards by coin ID
+function filterCryptoCards(coinId) {
+    const cards = document.querySelectorAll('.crypto-card');
+    
+    // Show "all coins" button if it doesn't exist
+    let resetFilterButton = document.getElementById('reset-filter-button');
+    if (!resetFilterButton) {
+        resetFilterButton = document.createElement('button');
+        resetFilterButton.id = 'reset-filter-button';
+        resetFilterButton.className = 'reset-filter-button';
+        resetFilterButton.innerHTML = '<span class="material-symbols-outlined">filter_alt_off</span>Show All Coins';
+        resetFilterButton.addEventListener('click', function() {
+            // Show all cards
+            cards.forEach(card => card.style.display = '');
+            // Remove the reset button
+            this.remove();
+        });
+        document.querySelector('.market-controls-row').appendChild(resetFilterButton);
+    }
+    
+    // Hide all cards except the selected one
+    cards.forEach(card => {
+        if (card.dataset.id === coinId) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Allow ESC key to close modal
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && searchModal.classList.contains('active')) {
+        searchModal.classList.remove('active');
+    }
+});
+    </script>
+</body>
+</html>

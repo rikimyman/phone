@@ -62,6 +62,142 @@
             border: 1px solid black;
         }
         
+        /* Settings panel styles */
+        /* Update the settings panel background color */
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: white; /* Ensure this is white */
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 1500;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+/* For the mobile version, ensure the background is white as well */
+@media screen and (max-width: 768px) {
+    .settings-panel {
+        background-color: white; /* Explicitly set to white for mobile */
+    }
+    
+    .settings-panel-header {
+        background-color: white; /* Ensure the header is white too */
+    }
+}
+
+        .settings-panel.active {
+            transform: translateX(0);
+        }
+
+        .settings-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-panel-header h3 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .settings-title {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .close-settings {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            font-size: 20px;
+        }
+
+        .settings-options {
+            padding: 15px;
+        }
+
+        .settings-option {
+            margin-bottom: 15px;
+        }
+
+        .option-label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-btn.light {
+            background-color: #f9f9f9;
+        }
+
+        .theme-btn.dark {
+            background-color: #333;
+        }
+
+        .theme-btn.active {
+            border-color: #555;
+        }
+
+        .toggle {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .toggle-slider {
+            width: 40px;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background-color: #4caf50;
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(20px);
+        }
+
         /* Bottom navbar styles */
         .navbar {
             background-color: white;
@@ -770,6 +906,284 @@
     background-color: #f9f9f9;
     box-shadow: 0 3px 8px rgba(0,0,0,0.08);
 }
+/* Settings panel styling */
+.settings-panel {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 280px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1200;
+}
+
+.settings-panel.active {
+    max-height: 400px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.settings-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-panel-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.close-settings {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #777;
+    transition: background-color 0.2s ease;
+}
+
+.close-settings:hover {
+    background-color: #f0f0f0;
+}
+
+.settings-options {
+    padding: 15px;
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.settings-option:last-child {
+    margin-bottom: 0;
+}
+
+.option-label {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Theme selector styling */
+.theme-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.theme-btn:hover {
+    transform: scale(1.1);
+}
+
+.theme-btn.light {
+    background-color: #f5f5f5;
+}
+
+.theme-btn.dark {
+    background-color: #333;
+}
+
+.theme-btn.active {
+    border-color: #007bff;
+}
+
+/* Toggle switch styling */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 22px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: #007bff;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* Mobile settings panel styling */
+@media screen and (max-width: 768px) {
+    .settings-panel {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 90vh;
+        max-height: 90vh;
+        border-radius: 20px 20px 0 0;
+        transform: translateY(100%);
+        transition: transform 0.6s cubic-bezier(0.3, 0, 0.2, 1);
+        overflow-y: auto;
+    }
+    
+    .settings-panel.active {
+        transform: translateY(0);
+        opacity: 1;
+        max-height: 90vh;
+    }
+    
+    .settings-panel-header {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 10;
+        padding: 18px 15px;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .settings-options {
+        padding: 20px 15px 80px 15px; /* Add bottom padding for spacing */
+    }
+    
+    /* Add overlay background when panel is active */
+    .settings-panel::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8); /* Change to white with transparency */
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .settings-panel.active::before {
+        opacity: 1;
+    }
+    /* Add Material Symbols for external link icon */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=north_east');
+
+}
+/* Updated footer styling with improved UI and elements moved down */
+/* Updated footer styling - smaller and moved further down */
+.settings-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;  /* Reduced gap between elements */
+}
+
+.terms-service {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;  /* Reduced gap */
+    background-color: transparent;
+    padding: 8px 15px;  /* Smaller padding */
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 70%;  /* Reduced width */
+    max-width: 180px;  /* Smaller max width */
+    margin: 0 auto;
+}
+
+.terms-label {
+    font-size: 13px;  /* Smaller font size */
+    font-weight: 500;
+    color: #333;
+}
+
+.external-link {
+    font-size: 14px;  /* Smaller icon */
+    color: #333;
+}
+
+.version-info {
+    margin-top: 10px;  /* Reduced margin */
+    padding: 5px 15px;  /* Smaller padding */
+    background-color: transparent;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.version-number {
+    font-size: 12px;  /* Smaller font size */
+    color: #999;  /* Even lighter text */
+    font-weight: 400;
+}
+
+/* For mobile version, ensure extra spacing at bottom */
+@media screen and (max-width: 768px) {
+    .settings-footer {
+        margin-top: 120px;  /* Even more space on mobile */
+        padding-bottom: 60px;
+    }
+}
     </style>
 </head>
 <body>
@@ -781,6 +1195,62 @@
         <button class="settings-button" aria-label="Settings">
             <span class="material-symbols-outlined">settings</span>
         </button>
+    </div>
+    
+    <!-- Settings panel -->
+    <div id="settings-panel" class="settings-panel">
+        <div class="settings-panel-header">
+            <h3 class="settings-title">Venuth Settings</h3>
+            <button class="close-settings" aria-label="Close settings">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="settings-options">
+            <div class="settings-option">
+                <span class="option-label">Theme</span>
+                <div class="theme-selector">
+                    <button class="theme-btn light active" data-theme="light"></button>
+                    <button class="theme-btn dark" data-theme="dark"></button>
+                </div>
+            </div>
+            <div class="settings-option">
+                <span class="option-label">Currency</span>
+                <label class="toggle">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="settings-option">
+                <span class="option-label">Language</span>
+                <label class="toggle">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="settings-option">
+                <span class="option-label">Notifications</span>
+                <label class="toggle">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Add spacer div to push footer down -->
+            <div style="height: 100px;"></div>
+        </div>
+        
+        <div class="settings-footer">
+            <div class="footer-content">
+                <div class="terms-service">
+                    <span class="terms-label">Terms of Service</span>
+                    <span class="material-symbols-outlined external-link">north_east</span>
+                </div>
+                
+                <div class="version-info">
+                    <span class="version-number">Version 1.2.0</span>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Bottom navigation bar -->
@@ -879,6 +1349,59 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script>
+
+// Terms of Service click handler
+document.querySelector('.terms-service').addEventListener('click', function() {
+    // Open terms of service page - replace with your actual URL
+    window.open('https://venuth.com/terms', '_blank');
+});
+
+        // Settings panel functionality
+const settingsButton = document.querySelector('.settings-button');
+const settingsPanel = document.getElementById('settings-panel');
+const closeSettingsBtn = document.querySelector('.close-settings');
+const themeButtons = document.querySelectorAll('.theme-btn');
+
+// Toggle settings panel
+settingsButton.addEventListener('click', function() {
+    settingsPanel.classList.add('active');
+    event.stopPropagation(); // Prevent document click from immediately closing
+});
+
+// Close settings panel when clicking X
+closeSettingsBtn.addEventListener('click', function() {
+    settingsPanel.classList.remove('active');
+});
+
+// Close settings when clicking outside
+document.addEventListener('click', function(event) {
+    if (settingsPanel.classList.contains('active') && 
+        !settingsPanel.contains(event.target) && 
+        !settingsButton.contains(event.target)) {
+        settingsPanel.classList.remove('active');
+    }
+});
+
+// Theme selection
+themeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove active class from all theme buttons
+        themeButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Here you would implement actual theme change
+        const selectedTheme = this.getAttribute('data-theme');
+        console.log('Selected theme:', selectedTheme);
+        
+        // Example implementation - add/remove dark theme class to body
+        if (selectedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+        }
+    });
+});
         // Function to fetch crypto data and create cards
         async function fetchCryptoData() {
             try {
@@ -987,8 +1510,6 @@
             // Skip chart if no price data
             if (prices.length === 0) return;
             
-            // Filter out any null or undefined values that might cause rendering issues
-            prices = prices.filter(price => price !== null && price !== undefined);
             
             // Ensure we have valid price data
             if (prices.length < 2) return;
@@ -1245,6 +1766,30 @@
                     }
                 });
             }, 1000); // Wait 1 second for fonts to load
+
+            // Settings panel functionality
+            const settingsButton = document.querySelector('.settings-button');
+            const settingsPanel = document.getElementById('settings-panel');
+            const closeSettingsButton = document.querySelector('.close-settings');
+
+            settingsButton.addEventListener('click', function() {
+                settingsPanel.classList.add('active');
+            });
+
+            closeSettingsButton.addEventListener('click', function() {
+                settingsPanel.classList.remove('active');
+            });
+
+            // Theme selector functionality
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            themeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    themeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const selectedTheme = this.dataset.theme;
+                    document.body.setAttribute('data-theme', selectedTheme);
+                });
+            });
         });
         // Search modal functionality
 const statsButton = document.querySelector('.stats-button');

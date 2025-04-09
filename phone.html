@@ -1117,73 +1117,165 @@ input:checked + .toggle-slider:before {
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=north_east');
 
 }
-/* Updated footer styling with improved UI and elements moved down */
-/* Updated footer styling - smaller and moved further down */
+/* Updated footer styling - move elements lower and make container smaller */
 .settings-footer {
     position: absolute;
-    bottom: 0;
+    bottom: 15px; /* Position closer to bottom */
     left: 0;
     width: 100%;
-    padding-top: 15px;
-    border-top: 1px solid #f0f0f0;
+    padding-top: 5px; /* Reduce top padding */
+    border-top: 1px solid transparent; /* Keep border transparent */
     text-align: center;
-    padding-bottom: 40px;
+    padding-bottom: 15px; /* Reduce bottom padding */
 }
 
 .footer-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;  /* Reduced gap between elements */
+    gap: 8px; /* Reduce gap between elements */
+    margin-bottom: 0; /* Remove bottom margin */
 }
 
 .terms-service {
     display: flex;
-    align-items: center;
+    align-items: center;  /* This ensures vertical alignment */
     justify-content: center;
-    gap: 6px;  /* Reduced gap */
+    gap: 4px; /* Reduce gap */
     background-color: transparent;
-    padding: 8px 15px;  /* Smaller padding */
+    padding: 4px 10px; /* Smaller padding */
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s ease;
-    width: 70%;  /* Reduced width */
-    max-width: 180px;  /* Smaller max width */
+    width: 65%; /* Slightly narrower */
+    max-width: 160px; /* Smaller max width */
     margin: 0 auto;
 }
 
 .terms-label {
-    font-size: 13px;  /* Smaller font size */
-    font-weight: 500;
-    color: #333;
+    font-size: 11px; /* Even smaller font */
+    font-weight: 400; /* Lighter font weight */
+    color: #999; /* Lighter color */
+    text-align: center;
+    line-height: 1; /* Add this to ensure consistent line height */
 }
 
 .external-link {
-    font-size: 14px;  /* Smaller icon */
-    color: #333;
+    font-size: 11px; /* Match the text size exactly */
+    color: #999; /* Match text color */
+    display: inline-flex; /* Better control over alignment */
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* Consistent with text */
+    margin-top: 0.5px; /* Tiny adjustment to perfectly align */
 }
-
 .version-info {
-    margin-top: 10px;  /* Reduced margin */
-    padding: 5px 15px;  /* Smaller padding */
+    margin-top: 2px; /* Minimal margin */
+    padding: 2px 10px;
     background-color: transparent;
     border-radius: 20px;
     display: inline-block;
+    text-align: center;
+    width: 100%;
 }
 
 .version-number {
-    font-size: 12px;  /* Smaller font size */
-    color: #999;  /* Even lighter text */
+    font-size: 10px; /* Smallest font size */
+    color: #bbb; /* Very light color */
     font-weight: 400;
+    text-align: center;
 }
 
-/* For mobile version, ensure extra spacing at bottom */
+/* For mobile version, ensure proper positioning */
 @media screen and (max-width: 768px) {
     .settings-footer {
-        margin-top: 120px;  /* Even more space on mobile */
-        padding-bottom: 60px;
+        bottom: 20px; /* Position closer to bottom on mobile */
     }
 }
+
+/* Remove the spacer div since we're using absolute positioning */
+.settings-options > div[style="height: 100px;"] {
+    display: none;
+}
+
+/* Updated language selector styling */
+.language-selector {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 125px; /* Set fixed width */
+    height: 36px; /* Match the toggle height */
+}
+
+.language-dropdown {
+    width: 100%;
+    padding: 7px 30px 7px 12px;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    font-size: 13px;
+    color: #555;
+    background-color: white;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.language-dropdown:hover {
+    border-color: #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.language-dropdown:focus {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #888;
+    pointer-events: none;
+}
+
+/* Fix settings options spacing and alignment */
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 5px;
+}
+
+.option-label {
+    font-size: 14px;
+    color: #444;
+    font-weight: 500;
+}
+
+/* Mobile adjustments for language selector */
+@media screen and (max-width: 768px) {
+    .language-dropdown {
+        padding: 8px 30px 8px 12px;
+        font-size: 14px;
+        border-radius: 20px;
+    }
+    
+    .language-selector {
+        width: 140px; /* Slightly wider on mobile */
+        height: 38px;
+    }
+    
+    .dropdown-arrow {
+        right: 12px;
+        font-size: 20px;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -1215,17 +1307,39 @@ input:checked + .toggle-slider:before {
             </div>
             <div class="settings-option">
                 <span class="option-label">Currency</span>
-                <label class="toggle">
-                    <input type="checkbox">
-                    <span class="toggle-slider"></span>
-                </label>
+                <div class="language-selector currency-selector">
+                    <select class="language-dropdown currency-dropdown">
+                        <option value="usd">USD ($)</option>
+                        <option value="eur">EUR (€)</option>
+                        <option value="gbp">GBP (£)</option>
+                        <option value="jpy">JPY (¥)</option>
+                        <option value="cny">CNY (¥)</option>
+                        <option value="inr">INR (₹)</option>
+                        <option value="aud">AUD ($)</option>
+                        <option value="cad">CAD ($)</option>
+                        <option value="chf">CHF (Fr)</option>
+                        <option value="btc">BTC (₿)</option>
+                    </select>
+                    <span class="material-symbols-outlined dropdown-arrow">arrow_drop_down</span>
+                </div>
             </div>
             <div class="settings-option">
                 <span class="option-label">Language</span>
-                <label class="toggle">
-                    <input type="checkbox">
-                    <span class="toggle-slider"></span>
-                </label>
+                <div class="language-selector">
+                    <select class="language-dropdown">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="it">Italiano</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                        <option value="ru">Русский</option>
+                        <option value="pt">Português</option>
+                    </select>
+                    <span class="material-symbols-outlined dropdown-arrow">arrow_drop_down</span>
+                </div>
             </div>
             <div class="settings-option">
                 <span class="option-label">Notifications</span>

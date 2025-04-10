@@ -76,6 +76,31 @@
     transition: transform 0.3s ease;
 }
 
+@media screen and (min-width: 769px) {
+    .crypto-cards-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on larger screens */
+        gap: 15px;
+        max-width: 900px;
+        margin: 20px auto;
+    }
+    
+    .crypto-card {
+        padding: 15px;
+    }
+    
+    .crypto-chart-container {
+        height: 60px; /* Taller charts for larger screens */
+    }
+}
+
+/* For even larger screens, use 4 columns */
+@media screen and (min-width: 1200px) {
+    .crypto-cards-container {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1100px;
+    }
+}
+
 /* For the mobile version, ensure the background is white as well */
 @media screen and (max-width: 768px) {
     .settings-panel {
@@ -86,10 +111,44 @@
         background-color: white; /* Ensure the header is white too */
     }
 }
+@media screen and (min-width: 769px) {
+    .settings-panel {
+        height: 120vh; /* Increased from 100vh to 120vh (120% of viewport height) */
+        max-height: none; /* Remove max-height restriction */
+        overflow-y: auto; /* Ensure scrolling works for extra content */
+    }
+    
+    .settings-options {
+        padding: 15px 15px 120px 15px; /* Increase bottom padding */
+        height: calc(120vh - 60px); /* Adjusted to match new panel height */
+    }
+}
+@media screen and (min-width: 769px) {
+    .settings-panel {
+        height: 600px; /* Fixed height */
+        max-height: 80vh;
+        position: fixed;
+        top: 70px;
+        right: 15px;
+        width: 300px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        transform: translateX(0) translateY(-10px) scale(0.97);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .settings-panel.active {
+        transform: translateX(0) translateY(0) scale(1);
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
 
-        .settings-panel.active {
-            transform: translateX(0);
-        }
+.settings-panel.active {
+    transform: translateX(0);
+}
 
         .settings-panel-header {
             display: flex;
@@ -330,10 +389,12 @@ body.dark-theme .toggle-slider:before {
 
         /* Additional styles for market cards - only visible on mobile */
         .market-section-mobile {
-            display: none;
+            display: block; /* Always show instead of hiding by default */
             width: 100%;
             padding: 20px 0px;
             box-sizing: border-box;
+            max-width: 900px; /* Wider max-width for larger screens */
+            margin: 0 auto;
         }
         
         /* Crypto cards styling - improved responsive layout */
@@ -936,25 +997,21 @@ body.dark-theme .toggle-slider:before {
 }
 /* Settings panel styling */
 .settings-panel {
-    position: absolute;
-    top: 60px;
-    right: 15px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
     background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    width: 280px;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1200;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 1500;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
 }
 
 .settings-panel.active {
-    max-height: 400px;
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
 }
 
 /* Remove the border between settings header and content */
@@ -1601,16 +1658,18 @@ body.dark-theme .nav-button {
     background-color: transparent;
 }
 
+/* Update navbar hover effect in dark mode to be invisible/more subtle */
 body.dark-theme .nav-button:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important; /* Very subtle hover effect */
+    background-color: transparent !important; /* Completely remove hover background */
     border-color: transparent;
 }
 
-/* Ensure settings button and other buttons have transparent borders */
-body.dark-theme .settings-button,
-body.dark-theme .sort-button,
-body.dark-theme .stats-button {
-    border-color: transparent;
+/* Alternative option - if you want some subtle indication on hover */
+body.dark-theme .nav-button:hover .material-symbols-outlined,
+body.dark-theme .nav-button:hover img {
+    transform: scale(1.1); /* Slightly enlarge the icon instead of background change */
+    opacity: 0.85; /* Slight brightness change instead of background */
+    transition: all 0.2s ease;
 }
 
 /* Make sure settings panel is properly styled in dark mode */
@@ -1715,6 +1774,338 @@ body.dark-theme .language-dropdown {
         background-color: rgba(0, 0, 0, 0.7);
     }
 }
+/* Create Account button styling */
+.create-account-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.create-account-btn:hover {
+    background-color: #f5f5f5;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Log Out button styling */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ffebeb;
+    border: 1px solid #ffcdd2;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #e53935;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: #ffcdd2;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Dark mode styling for the buttons */
+body.dark-theme .create-account-btn {
+    background-color: #333333;
+    border-color: #444444;
+    color: #cccccc;
+}
+
+body.dark-theme .create-account-btn:hover {
+    background-color: #444444;
+}
+
+body.dark-theme .logout-btn {
+    background-color: rgba(229, 57, 53, 0.2);
+    border-color: rgba(229, 57, 53, 0.3);
+    color: #ff6b6b;
+}
+
+body.dark-theme .logout-btn:hover {
+    background-color: rgba(229, 57, 53, 0.3);
+}
+/* Account buttons row styling */
+.account-buttons-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px auto 20px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Adjust button sizes for side-by-side layout */
+.account-buttons-row .create-account-btn,
+.account-buttons-row .logout-btn {
+    padding: 8px 15px;
+    flex: 1;
+    max-width: 120px;
+    justify-content: center;
+}
+
+/* Reduce the spacer height since we've removed an option */
+.settings-options > div[style="height: 100px;"] {
+    height: 60px;
+}
+
+@media screen and (max-width: 768px) {
+    .account-buttons-row {
+        margin: 25px auto 15px;
+    }
+}
+
+/* Login button styling */
+.login-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #4daf7c;
+    border: 1px solid #3d8c63;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.login-btn:hover {
+    background-color: #3d8c63;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Dark mode styling for login button */
+body.dark-theme .login-btn {
+    background-color: #3d8c63;
+    border-color: #2d6b4a;
+    color: #ffffff;
+}
+
+body.dark-theme .login-btn:hover {
+    background-color: #2d6b4a;
+}
+
+/* Logout container for centered logout button */
+.logout-container {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+    width: 100%;
+}
+
+/* Login Modal */
+.login-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.login-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.login-modal-content {
+    width: 320px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.login-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.login-modal-header h3 {
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.close-login {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #777;
+}
+
+.login-form {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #666;
+}
+
+.forgot-password {
+    font-size: 12px;
+    color: #4daf7c;
+    text-decoration: none;
+}
+
+.submit-login {
+    width: 100%;
+    background-color: #4daf7c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-login:hover {
+    background-color: #3d8c63;
+}
+
+/* Dark mode for login modal */
+body.dark-theme .login-modal-content {
+    background-color: #121212;
+    border: 1px solid #333;
+}
+
+body.dark-theme .login-modal-header {
+    border-color: #333;
+}
+
+body.dark-theme .login-modal-header h3 {
+    color: #cccccc;
+}
+
+body.dark-theme .close-login {
+    color: #999;
+}
+
+body.dark-theme .form-group label {
+    color: #cccccc;
+}
+
+body.dark-theme .form-group input {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #cccccc;
+}
+
+body.dark-theme .remember-me {
+    color: #aaa;
+}
+
+body.dark-theme .forgot-password {
+    color: #6de99c;
+}
+
+.terms-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+body.dark-theme .terms-checkbox {
+    color: #aaa;
+}
+/* Improved Create Account button styling */
+.submit-create-account {
+    width: 100%;
+    background-color: #4daf7c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 6px rgba(77, 175, 124, 0.2);
+}
+
+.submit-create-account:hover {
+    background-color: #3d8c63;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(77, 175, 124, 0.3);
+}
+
+.submit-create-account:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(77, 175, 124, 0.2);
+}
+
+/* Dark mode styling */
+body.dark-theme .submit-create-account {
+    background-color: #3d8c63;
+    box-shadow: 0 2px 6px rgba(77, 175, 124, 0.1);
+}
+
+body.dark-theme .submit-create-account:hover {
+    background-color: #2d6b4a;
+    box-shadow: 0 4px 8px rgba(77, 175, 124, 0.2);
+}
 
     </style>
 </head>
@@ -1722,7 +2113,7 @@ body.dark-theme .language-dropdown {
     <!-- Top bar with logo and settings -->
     <div class="topbar">
         <div class="logo-container">
-            <img src="venuth.png" alt="Logo" class="logo">
+            <img src="1.png" alt="Logo" class="logo">
         </div>
         <button class="settings-button" aria-label="Settings">
             <span class="material-symbols-outlined">settings</span>
@@ -1788,6 +2179,59 @@ body.dark-theme .language-dropdown {
                     <span class="toggle-slider"></span>
                 </label>
             </div>
+           <!-- Remove the current separate account options -->
+<!-- Add Login Button to account-buttons-row -->
+<div class="account-buttons-row">
+    <button class="create-account-btn">
+        <span class="material-symbols-outlined">person_add</span>
+        <span class="btn-text">Create</span>
+    </button>
+    <button class="login-btn">
+        <span class="material-symbols-outlined">login</span>
+        <span class="btn-text">Login</span>
+    </button>
+</div>
+
+<!-- Add a separate Log Out button centered -->
+<div class="logout-container">
+    <button class="logout-btn">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="btn-text">Log Out</span>
+    </button>
+</div>
+
+<!-- Add Login Modal -->
+<div id="login-modal" class="login-modal">
+    <div class="login-modal-content">
+        <div class="login-modal-header">
+            <h3>Login to Venuth</h3>
+            <button class="close-login" aria-label="Close login">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <div class="form-actions">
+                <div class="remember-me">
+                    <label class="toggle">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span>Remember me</span>
+                </div>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            <button class="submit-login">Login</button>
+        </div>
+    </div>
+</div>
             
             <!-- Add spacer div to push footer down -->
             <div style="height: 100px;"></div>
@@ -1818,7 +2262,7 @@ body.dark-theme .language-dropdown {
                 <span class="material-symbols-outlined">widgets</span>
             </button>
             <button class="nav-button" aria-label="AI">
-                <img src="venuth.png" alt="Zenus" height="24">
+                <img src="1.png" alt="Zenus" height="24">
             </button>
             <button class="nav-button" aria-label="Profile">
                 <span class="material-symbols-outlined">person</span>
@@ -1905,6 +2349,204 @@ body.dark-theme .language-dropdown {
     
     <script>
 
+        // Login functionality
+const loginBtn = document.querySelector('.login-btn');
+const loginModal = document.getElementById('login-modal');
+const closeLoginBtn = document.querySelector('.close-login');
+const submitLoginBtn = document.querySelector('.submit-login');
+
+// Show login modal when login button is clicked
+loginBtn.addEventListener('click', function() {
+    loginModal.classList.add('active');
+});
+
+// Close login modal when close button is clicked
+closeLoginBtn.addEventListener('click', function() {
+    loginModal.classList.remove('active');
+});
+
+// Close modal when clicking outside the content
+loginModal.addEventListener('click', function(event) {
+    if (event.target === loginModal) {
+        loginModal.classList.remove('active');
+    }
+});
+
+// Handle login form submission
+// Handle login form submission
+submitLoginBtn.addEventListener('click', function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    // Here you would typically send the credentials to your server
+    // For now, we'll just log them and close the modal
+    console.log('Login attempt:', { email, password });
+    
+    // Simple validation
+    if (email && password) {
+        alert('Login successful!');
+        loginModal.classList.remove('active');
+        
+        // Hide Create Account and Login buttons
+        document.querySelector('.account-buttons-row').style.display = 'none';
+        
+        // Show logout button
+        document.querySelector('.logout-container').style.display = 'flex';
+    } else {
+        alert('Please enter both email and password');
+    }
+});
+
+// Hide logout button by default (would be shown after successful login)
+document.querySelector('.logout-container').style.display = 'none';
+
+// Handle logout
+document.querySelector('.logout-btn').addEventListener('click', function() {
+    // In a real app, this would clear the authentication token/session
+    console.log('User logged out');
+    alert('You have been logged out');
+    
+    // Hide logout button after logout
+    document.querySelector('.logout-container').style.display = 'none';
+    
+    // Show Create Account and Login buttons again
+    document.querySelector('.account-buttons-row').style.display = 'flex';
+});
+// Create Account functionality
+const createAccountBtn = document.querySelector('.create-account-btn');
+const createAccountModal = document.createElement('div');
+createAccountModal.id = 'create-account-modal';
+createAccountModal.className = 'login-modal'; // Reuse login modal styling
+document.body.appendChild(createAccountModal);
+
+// Update the create account modal HTML to include proper styling for the close button
+createAccountModal.innerHTML = `
+    <div class="login-modal-content">
+        <div class="login-modal-header">
+            <h3>Create Account</h3>
+            <button class="close-create-account" aria-label="Close create account">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="create-account-form" class="login-form">
+            <div class="form-group">
+                <label for="create-name">Name</label>
+                <input type="text" id="create-name" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="create-email">Email</label>
+                <input type="email" id="create-email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="create-password">Password</label>
+                <input type="password" id="create-password" placeholder="Create a password">
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" placeholder="Confirm your password">
+            </div>
+            <div class="form-actions">
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="accept-terms">
+                    <label for="accept-terms">I accept the Terms of Service</label>
+                </div>
+            </div>
+            <button type="button" class="submit-create-account">
+                <span class="material-symbols-outlined">person_add</span>
+                Create Account
+            </button>
+        </form>
+    </div>
+`;
+
+// Add CSS for the close-create-account button
+const style = document.createElement('style');
+style.textContent = `
+    .close-create-account {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #777;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+    }
+
+    .close-create-account:hover {
+        background-color: #f0f0f0;
+    }
+
+    body.dark-theme .close-create-account {
+        color: #999;
+    }
+
+    body.dark-theme .close-create-account:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+`;
+document.head.appendChild(style);
+
+
+// Show create account modal when create account button is clicked
+createAccountBtn.addEventListener('click', function() {
+    createAccountModal.classList.add('active');
+});
+
+// Close modal when clicking close button
+const closeCreateAccountBtn = document.querySelector('.close-create-account');
+closeCreateAccountBtn.addEventListener('click', function() {
+    createAccountModal.classList.remove('active');
+});
+
+// Close modal when clicking outside the content
+createAccountModal.addEventListener('click', function(event) {
+    if (event.target === createAccountModal) {
+        createAccountModal.classList.remove('active');
+    }
+});
+
+// Handle account creation submission
+const submitCreateAccountBtn = document.querySelector('.submit-create-account');
+submitCreateAccountBtn.addEventListener('click', function() {
+    const name = document.getElementById('create-name').value;
+    const email = document.getElementById('create-email').value;
+    const password = document.getElementById('create-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const acceptTerms = document.getElementById('accept-terms').checked;
+    
+    // Simple validation
+    if (!name || !email || !password || !confirmPassword) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    if (!acceptTerms) {
+        alert('Please accept the Terms of Service');
+        return;
+    }
+    
+    // Here you would send the data to your server
+    console.log('Account creation:', { name, email, password });
+    
+    alert('Account created successfully!');
+    createAccountModal.classList.remove('active');
+    
+    // Hide Create Account and Login buttons
+    document.querySelector('.account-buttons-row').style.display = 'none';
+    
+    // Show logout button
+    document.querySelector('.logout-container').style.display = 'flex';
+});
 // Terms of Service click handler
 document.querySelector('.terms-service').addEventListener('click', function() {
     // Open terms of service page - replace with your actual URL
@@ -1939,7 +2581,46 @@ document.addEventListener('click', function(event) {
 
 // Theme selection
 // ...existing code...
+// Theme selection with logo swap for both top bar and navbar
+themeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove active class from all theme buttons
+        themeButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Get the selected theme
+        const selectedTheme = this.getAttribute('data-theme');
+        const topbarLogoElement = document.querySelector('.logo-container img');
+        const navbarLogoElement = document.querySelector('.nav-button[aria-label="AI"] img');
+        
+        // Toggle dark mode and update logos
+        if (selectedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            topbarLogoElement.src = '2.png'; // Change topbar logo to dark mode
+            navbarLogoElement.src = '2.png'; // Change navbar logo to dark mode
+        } else {
+            document.body.classList.remove('dark-theme');
+            topbarLogoElement.src = '1.png'; // Change topbar logo to light mode
+            navbarLogoElement.src = '1.png'; // Change navbar logo to light mode
+        }
+    });
+});
 
+// Also set the correct logos on page load based on initial theme
+document.addEventListener('DOMContentLoaded', function() {
+    const isDarkMode = document.body.classList.contains('dark-theme');
+    const topbarLogoElement = document.querySelector('.logo-container img');
+    const navbarLogoElement = document.querySelector('.nav-button[aria-label="AI"] img');
+    
+    if (isDarkMode) {
+        topbarLogoElement.src = '2.png';
+        navbarLogoElement.src = '2.png';
+    } else {
+        topbarLogoElement.src = '1.png';
+        navbarLogoElement.src = '1.png';
+    }
+});
 // Theme selection
 themeButtons.forEach(button => {
     button.addEventListener('click', function() {
